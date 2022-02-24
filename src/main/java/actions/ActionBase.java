@@ -93,14 +93,16 @@ public abstract class ActionBase {
      * @throws IOException
      */
                             //enum型
-    protected void forward(ForwardConst target) throws ServletException, IOException{
-                                                      //%s:toString()として出力する
-        String forward = String.format("/WEB-INF/views/%s.jsp", target.getValue());
+    protected void forward(ForwardConst target) throws ServletException, IOException {
 
+        //jspファイルの相対パスを作成
+                                                        //%s:toString()として出力する
+        String forward = String.format("/WEB-INF/views/%s.jsp", target.getValue());
         RequestDispatcher dispatcher = request.getRequestDispatcher(forward);
 
-        //jspの呼び出し
+        //jspファイルの呼び出し
         dispatcher.forward(request, response);
+
     }
 
 
@@ -209,7 +211,7 @@ public abstract class ActionBase {
      * @param value パラメータの値
      */
             //<V>はString,intなんでもOK
-    protected <V> void putRequestScope(Attribute key, V value) {
+    protected <V> void putRequestScope(AttributeConst key, V value) {
         request.setAttribute(key.getValue(), value);
     }
 
@@ -218,8 +220,9 @@ public abstract class ActionBase {
      * @param key パラメータ名
      * @return パラメータの値
      */
+    //メッセージボードの場合はどうなっていたのか？
     @SuppressWarnings("unchecked")
-    protected <R> R getSessionScope(Attribute key) {
+    protected <R> R getSessionScope(AttributeConst key) {
         return (R) request.getSession().getAttribute(key.getValue());
     }
 
@@ -239,7 +242,7 @@ public abstract class ActionBase {
     protected void removeSessionScope(AttributeConst key) {
         request.getSession().removeAttribute(key.getValue());
     }
-    
+
     /**
      * アプリケーションスコープから指定されたパラメータの値を取得し、返却
      * @param key パラメータ名

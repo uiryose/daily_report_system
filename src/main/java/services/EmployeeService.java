@@ -23,11 +23,11 @@ public class EmployeeService extends ServiceBase {
     public List<EmployeeView> getPerPage(int page) {
                                         //ENTITY_EMP + ".getAll"; //name
         //「JpaConst.Q_EMP_GET_ALL」という名前でSQL文"SELECT e FROM Employee AS e ORDER BY e.id DESC"を定義している
-        //「Employee.class」は何を表しているのか？
+        //第2引数の「Employee.class」は何を表しているのか？
 
         List<Employee> employees = em.createNamedQuery(JpaConst.Q_EMP_GET_ALL, Employee.class)
                 .setFirstResult(JpaConst.ROW_PER_PAGE * (page - 1))    //SQLでDB検索をし、従業員データからid順で、1番目から
-                .setMaxResults(JpaConst.ROW_PER_PAGE)                  //15番目までを取得し、
+                .setMaxResults(JpaConst.ROW_PER_PAGE)                  //15個までを取得し、
                 .getResultList();                                       //クエリーインスタンスに結果をリストで格納する
 
         return EmployeeConverter.toViewList(employees);     //DB用のリストをビュー用に変換する

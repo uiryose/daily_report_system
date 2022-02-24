@@ -92,7 +92,7 @@ public class EmployeeConverter {
     //EmployeeViewクラスは画面に表示する従業員と日付の情報を格納
     public static List<EmployeeView> toViewList(List<Employee> list){
       //ざっくりとしたリストをインスタンス化
-        List<EmployeeView> evs = new ArrayList();
+        List<EmployeeView> evs = new ArrayList<>();
       //既に個別情報が格納されているlistから、toView(e)ごと改めてリストに格納←ここがわからない…
         for (Employee e : list) {
             evs.add(toView(e));
