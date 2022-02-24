@@ -42,8 +42,8 @@ public class EmployeeService extends ServiceBase {
     public long countAll() {
 
         //「JpaConst.Q_EMP_COUNT」という名前でSQL文"SELECT COUNT(e) FROM Employee AS e"を定義している
-        long empCount = (long) em.createNamedQuery(JpaConst.Q_EMP_COUNT, long.class).getSingleResult();
-
+        long empCount = (long) em.createNamedQuery(JpaConst.Q_EMP_COUNT, Long.class).getSingleResult();
+                                                //Long.classとlong.classでは全く異なる？どういう構文？
         return empCount;
     }
 
