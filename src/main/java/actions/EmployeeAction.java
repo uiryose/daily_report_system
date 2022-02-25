@@ -9,6 +9,8 @@ import actions.views.EmployeeView;
 import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
+import constants.MessageConst;
+import constants.PropertyConst;
 import services.EmployeeService;
 
 /**
@@ -76,7 +78,58 @@ public class EmployeeAction extends ActionBase {
         //リクエストスコープに"employee"=従業員インスタンスを保存する
         putRequestScope(AttributeConst.EMPLOYEE, new EmployeeView());
 
-        forward(ForwardConst.FW_EMP_NEW);
+        forward(ForwardConst.FW_EMP_NEW);   //    "/WEB-INF/views/%s.jsp"の%sに"employees/new"を当てる
     }
+
+    /**
+     * 新規登録を行う
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void create() throws ServletException, IOException{
+
+        //CSRF対策 tokenのチェック
+        if(checkToken()) {
+
+            //パラメータの値を元に従業員情報のインスタンスを作成する
+            EmployeeView ev = new EmployeeView(
+                    null,
+                    getRequestParam(AttributeConst.EMP_CODE),
+                    getRequestParam(AttributeConst.EMP_NAME),
+                    getRequestParam(AttributeConst.EMP_PASS),
+                    toNumber(getRequestParam(AttributeConst.EMP_ADMIN_FLG)), //文字列0or1を取得し、toNumberでIntegerにする
+                    null,
+                    null,
+                    AttributeConst.DEL_FLAG_FALSE.getIntegerValue());  //this.iでDEL_FLAG_FALSEの0を返す。
+
+            //アプリケーションスコープからpepper文字列を取得
+            String pepper = getContextScope(PropertyConst.PEPPER);  //contextが絡む処理が理解できていない…pepperて何？
+
+            //従業員情報登録
+            List<String> errors = service.create(ev, pepper);  //奥が深い…create(*,*)ハッシュ化したパス+日時をevに追加。エラーがあれば返す
+                                                               //エラーがなければcreate(*)でDBに登録までする
+
+            if(errors.size() > 0) {
+                //登録中にエラーがあった場合。リクエストスコープに３種の情報を保存する。
+                putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン  …エラーなのに取得してどうする？
+                putRequestScope(AttributeConst.EMPLOYEE, ev ); //入力された従業員情報
+                putRequestScope(AttributeConst.ERR, errors); //エラーのリスト
+
+                //新規登録画面を再表示
+                forward(ForwardConst.FW_EMP_NEW);
+            } else {
+                //登録中にエラーがなかった場合
+
+                //セッションに登録完了のフラッシュメッセージを設定
+                                                        //  I_REGISTERED==>("登録が完了しました。"),
+                putSessionScope(AttributeConst.FLUSH, MessageConst.I_REGISTERED.getMessage());
+
+                //一覧画面にリダイレクトする
+                redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_INDEX);
+            }
+        }
+    }
+
+
 
 }

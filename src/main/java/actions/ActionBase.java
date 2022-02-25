@@ -10,7 +10,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.stream.events.Attribute;
 
 import constants.AttributeConst;
 import constants.ForwardConst;
@@ -126,7 +125,7 @@ public abstract class ActionBase {
      * @throws ServletException
      * @throws IOException
      */
-    protected boolean cheackToken() throws ServletException, IOException{
+    protected boolean checkToken() throws ServletException, IOException{
       //パラメータからtokenの値を取得
          //getRequestParamは下で別途定義。AttributeConst.TOKEN =="_token"の文字列
         String _token = getRequestParam(AttributeConst.TOKEN);
@@ -231,7 +230,7 @@ public abstract class ActionBase {
      * @param key パラメータ名
      * @param value パラメータの値
      */
-    protected <V> void putSessionScope(Attribute key, V value) {
+    protected <V> void putSessionScope(AttributeConst key, V value) {
         request.getSession().setAttribute(key.getValue(),value);
     }
 
