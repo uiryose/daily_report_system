@@ -130,6 +130,29 @@ public class EmployeeAction extends ActionBase {
         }
     }
 
+    public void show() throws ServletException, IOException {
+
+        //idを条件に従業員データを取得する
+
+        //findOneInternal(id)でDBからID検索で従業員情報を取得し、eに格納。その後、findOne(id)でDB用をVIEW用にした戻り値を受ける
+        EmployeeView ev = service.findOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
+
+        //もしevが空か、evが削除済になっていたら、
+        if(ev ==null || ev.getDeleteFlag()==AttributeConst.DEL_FLAG_TRUE.getIntegerValue()) {
+
+            //データが取得できなかった、または論理削除されている場合はエラー画面を表示
+            forward(ForwardConst.FW_ERR_UNKNOWN);
+            return;                                         //このreturnは何を戻している？
+        }
+
+        putRequestScope(AttributeConst.EMPLOYEE, ev); //取得した従業員情報をリクエストスコープに保存
+
+        //詳細画面show.jspにフォワード
+        forward(ForwardConst.FW_EMP_SHOW);
+    }
+
+
+
 
 
 }

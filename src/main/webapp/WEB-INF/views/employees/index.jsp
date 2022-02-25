@@ -24,8 +24,9 @@
                     <th>氏名</th>
                     <th>操作</th>
                 </tr>
-                <c:forEach var="employee" items="${employee}" varStatus="status">
+                <c:forEach var="employee" items="${employees}" varStatus="status">
                    <tr class="row${status.count %2 }">
+    <!-- "row${status.count %2 }" で何を戻している -->
                        <td><c:out value="${employee.code}"/></td>
                        <td><c:out value="${employee.name}"/></td>
                        <td>
