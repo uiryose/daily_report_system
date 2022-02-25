@@ -91,3 +91,7 @@ button {
     color: #721c24;
     background-color: #f8d7da;
 }
+
+select {
+    height: 30px;
+}

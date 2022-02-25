@@ -65,4 +65,18 @@ public class EmployeeAction extends ActionBase {
 
     }
 
+
+    public void entryNew() throws ServletException, IOException{
+
+        //CSRF対策用トークン
+        putRequestScope(AttributeConst.TOKEN, getTokenId());
+
+        //空の従業員インスタンス
+        //   putR-S==>request.setAttribute(key.getValue(), value);
+        //リクエストスコープに"employee"=従業員インスタンスを保存する
+        putRequestScope(AttributeConst.EMPLOYEE, new EmployeeView());
+
+        forward(ForwardConst.FW_EMP_NEW);
+    }
+
 }
