@@ -152,6 +152,30 @@ public class EmployeeAction extends ActionBase {
     }
 
 
+    public void edit() throws ServletException, IOException {
+
+        //idを条件に従業員データを取得する
+        EmployeeView ev = service.findOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
+
+        if(ev==null || ev.getDeleteFlag()==AttributeConst.DEL_FLAG_TRUE.getIntegerValue()) {
+
+            //データが取得できなかった、または論理削除されている場合はエラー画面を表示
+            forward(ForwardConst.FW_ERR_UNKNOWN);
+            return;   //このreturn；は何を返すのか？
+        }
+
+        putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
+
+        //DBからID検で取得したev情報をリクエストスコープに保存する
+        putRequestScope(AttributeConst.EMPLOYEE, ev);
+
+        //編集画面を表示する
+        forward(ForwardConst.FW_EMP_EDIT);
+
+    }
+
+
+
 
 
 
