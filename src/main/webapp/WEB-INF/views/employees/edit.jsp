@@ -14,6 +14,7 @@
     <h2>id : ${employee.id}の従業員情報 編集ページ</h2>    <!-- AbbustractConst.EMP_ID.getIntegerValue()とかにしないのはなぜ -->
     <p> (パスワードは変更する場合のみ入力してください) </p>
 
+    <!-- このフォームでは何をしている？POSTの範囲とか、用途が不明 -->
     <form method="POST"
         action="<c:url value='?action=${action}&command=${commUpd}'/> ">
         <c:import url="_form.jsp" />
@@ -25,15 +26,16 @@
 
     <form method="POST"
         action="<c:url value='?action=${action}&command=${commDel}'/>">
-        <input type="hidden" name="${AttributeConst.EMP_ID.getValue()}" value="${employee.id}"/> <!-- ↑に関連してこの2つの違いは？ -->
+        <input type="hidden" name="${AttributeConst.EMP_ID.getValue()}" value="${employee.id}"/>
+        <!-- ↑に関連してこの2つの違いは？ -->
         <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}"/>
     </form>
 
     <script>
         function confirmDestroy(){
-            if(confirm("本当に削除してよろしいですか？"){
-                document.forms[1].submit():
-            })
+            if(confirm("本当に削除してよろしいですか？")){
+                document.forms[1].submit();
+            }
         }
     </script>
 

@@ -34,6 +34,8 @@ public abstract class ActionBase {
      * @param servletResponse
      */
 
+    //上記のフィールドの考え方？がよくわからない
+
     public void init(
             ServletContext servletContext,
             HttpServletRequest servletRequest,
