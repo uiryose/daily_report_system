@@ -174,6 +174,49 @@ public class EmployeeAction extends ActionBase {
 
     }
 
+    public void update() throws ServletException, IOException{
+
+      //CSRF対策 tokenのチェック
+        if(checkToken()) {
+            //パラメータの値を元に従業員情報のインスタンスを作成する
+
+            EmployeeView ev = new EmployeeView(
+                    toNumber(getRequestParam(AttributeConst.EMP_ID)), //edit.jspではAttributeConst.EMP_ID.getValue()なのに、getValue()の違いは？
+                    getRequestParam(AttributeConst.EMP_CODE),
+                    getRequestParam(AttributeConst.EMP_NAME),
+                    getRequestParam(AttributeConst.EMP_PASS),
+                    toNumber(getRequestParam(AttributeConst.EMP_ADMIN_FLG)),
+                    null,
+                    null,
+                    AttributeConst.DEL_FLAG_FALSE.getIntegerValue());
+
+            //アプリケーションスコープからpepper文字列を取得
+            String pepper = getContextScope(PropertyConst.PEPPER);
+
+            //従業員情報更新
+            List<String> errors = service.update(ev, pepper); //奥が深い…service.も不明点再び現れる
+
+            if(errors.size() > 0) {
+                //更新中にエラーが発生した場合
+
+                putRequestScope(AttributeConst.TOKEN, getTokenId());
+                putRequestScope(AttributeConst.EMPLOYEE, ev);  //編集用で入力された従業員情報
+                putRequestScope(AttributeConst.ERR, errors);   //update()中に蓄積されたエラー
+
+                //編集画面を再表示して、上記の注意文を表示
+                forward(ForwardConst.FW_EMP_EDIT);
+            } else {
+                //エラーがなかった場合
+
+                //セッションに更新完了のフラッシュメッセージを設定
+                putSessionScope(AttributeConst.FLUSH, MessageConst.I_UPDATED.getMessage());
+
+                //一覧画面にリダイレクトする
+                redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_INDEX); //redirect(employee, index)
+            }
+        }
+    }
+
 
 
 
