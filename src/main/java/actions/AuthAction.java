@@ -57,6 +57,11 @@ public class AuthAction extends ActionBase{
         forward(ForwardConst.FW_LOGIN);
     }
 
+    /**
+     * ログイン処理を行う
+     * @throws ServletException
+     * @throws IOException
+     */
     public void login() throws ServletException, IOException{
 
         //ログイン画面から送られるIDとパスワードのリクエストパラメータの値を取得する
@@ -96,9 +101,19 @@ public class AuthAction extends ActionBase{
             putRequestScope(AttributeConst.EMP_CODE, code);  //認証失敗時はlogin.jspの<input value="初期値">用に${code}を設定しておく
 
             forward(ForwardConst.FW_LOGIN);
-
         }
+    }
 
+
+    public void logout() throws ServletException, IOException{
+
+        //セッションからログイン従業員のパラメータを削除
+        //セッションにログアウト時のフラッシュメッセージを追加
+        //ログイン画面にリダイレクト
+
+        removeSessionScope(AttributeConst.LOGIN_EMP);  //LOGIN_EMP==>"login_employee" ログイン時にこの名前でevがまとめて保存されている
+        putSessionScope(AttributeConst.FLUSH, MessageConst.I_LOGOUT.getMessage());
+        redirect(ForwardConst.ACT_AUTH, ForwardConst.CMD_SHOW_LOGIN); //CMD_SHOW_LOGIN==>"showLogin"
     }
 
 
