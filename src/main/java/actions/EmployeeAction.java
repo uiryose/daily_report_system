@@ -36,60 +36,79 @@ public class EmployeeAction extends ActionBase {
 
     }
 
+    /**
+     * 従業員の一覧画面を表示する。見れるのは管理者のみ
+     * @throws ServletException
+     * @throws IOException
+     */
+
     public void index() throws ServletException, IOException {
 
-        //指定されたページ数の一覧画面に表示するデータを取得
-        int page = getPage(); //パラメータから"page"に対応する情報を数値で取得する
-        List<EmployeeView> employees = service.getPerPage(page); //1-15,16-30ごと従業員情報を取得？
 
-        //全ての従業員データの件数を取得
-        long employeeCount = service.countAll();
+        //管理者かどうかのチェック(追記)
+        if(checkAdmin()) {
 
-        //リクエストスコープにそれぞれパラメータを保存
-        putRequestScope(AttributeConst.EMPLOYEES, employees);//取得した従業員データ
-        putRequestScope(AttributeConst.EMP_COUNT, employeeCount);//全ての従業員データの件数
-        putRequestScope(AttributeConst.PAGE, page); //ページ数
-        putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE);//1ページに表示するレコードの数
+            //指定されたページ数の一覧画面に表示するデータを取得
+            int page = getPage(); //パラメータから"page"に対応する情報を数値で取得する
+            List<EmployeeView> employees = service.getPerPage(page); //1-15,16-30ごと従業員情報を取得？
 
-        //セッションにフラッシュメッセージが設定されている場合はリクエストスコープに移し替え、セッションからは削除する
-        //各アクションで「登録が完了しました」や「更新が完了しました」、「削除が完了しました」といった内容を一覧画面にフラッシュメッセージとして表示します。
+            //全ての従業員データの件数を取得
+            long employeeCount = service.countAll();
 
-        //いつflush文をセッションスコープに保存しているのか？
-        String flush = getSessionScope(AttributeConst.FLUSH);
+            //リクエストスコープにそれぞれパラメータを保存
+            putRequestScope(AttributeConst.EMPLOYEES, employees);//取得した従業員データ
+            putRequestScope(AttributeConst.EMP_COUNT, employeeCount);//全ての従業員データの件数
+            putRequestScope(AttributeConst.PAGE, page); //ページ数
+            putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE);//1ページに表示するレコードの数
 
-        if (flush != null) {
-            putRequestScope(AttributeConst.FLUSH, flush); //文字列flushがあったらリクエストスコープに保存
-            removeSessionScope(AttributeConst.FLUSH); //セッションスコープからは削除する
+            //セッションにフラッシュメッセージが設定されている場合はリクエストスコープに移し替え、セッションからは削除する
+            //各アクションで「登録が完了しました」や「更新が完了しました」、「削除が完了しました」といった内容を一覧画面にフラッシュメッセージとして表示します。
+
+            //いつflush文をセッションスコープに保存しているのか？
+            String flush = getSessionScope(AttributeConst.FLUSH);
+
+            if (flush != null) {
+                putRequestScope(AttributeConst.FLUSH, flush); //文字列flushがあったらリクエストスコープに保存
+                removeSessionScope(AttributeConst.FLUSH); //セッションスコープからは削除する
+            }
+
+            //一覧画面を表示     "employees/index"にフォワード
+            forward(ForwardConst.FW_EMP_INDEX);
         }
-
-        //一覧画面を表示     "employees/index"にフォワード
-        forward(ForwardConst.FW_EMP_INDEX);
-
-    }
-
-
-    public void entryNew() throws ServletException, IOException{
-
-        //CSRF対策用トークン
-        putRequestScope(AttributeConst.TOKEN, getTokenId());
-
-        //空の従業員インスタンス
-        //   putR-S==>request.setAttribute(key.getValue(), value);
-        //リクエストスコープに"employee"=従業員インスタンスを保存する
-        putRequestScope(AttributeConst.EMPLOYEE, new EmployeeView());
-
-        forward(ForwardConst.FW_EMP_NEW);   //    "/WEB-INF/views/%s.jsp"の%sに"employees/new"を当てる
     }
 
     /**
-     * 新規登録を行う
+     * 従業員の新規登録画面を表示する。登録できるのは管理者のみ
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void entryNew() throws ServletException, IOException{
+
+        //管理者かどうかのチェック(追記)
+        if(checkAdmin()) {
+
+            //CSRF対策用トークン
+            putRequestScope(AttributeConst.TOKEN, getTokenId());
+
+            //空の従業員インスタンス
+            //   putR-S==>request.setAttribute(key.getValue(), value);
+            //リクエストスコープに"employee"=従業員インスタンスを保存する
+            putRequestScope(AttributeConst.EMPLOYEE, new EmployeeView());
+
+            //新規登録画面を表示
+            forward(ForwardConst.FW_EMP_NEW);   //    "/WEB-INF/views/%s.jsp"の%sに"employees/new"を当てる
+        }
+    }
+
+    /**
+     * 従業員の新規登録を行う。登録できるのは管理者のみ
      * @throws ServletException
      * @throws IOException
      */
     public void create() throws ServletException, IOException{
 
-        //CSRF対策 tokenのチェック
-        if(checkToken()) {
+        //CSRF対策 tokenのチェックと管理者権限のチェック
+        if(checkToken() && checkAdmin()) {
 
             //パラメータの値を元に従業員情報のインスタンスを作成する
             EmployeeView ev = new EmployeeView(
@@ -130,56 +149,69 @@ public class EmployeeAction extends ActionBase {
         }
     }
 
+    /**
+     * 従業員情報の詳細画面を表示する。見れるのは管理者のみ
+     * @throws ServletException
+     * @throws IOException
+     */
+
     public void show() throws ServletException, IOException {
 
-        //idを条件に従業員データを取得する
+        //管理者かどうかのチェック //追記
+        if (checkAdmin()) {
 
-        //findOneInternal(id)でDBからID検索で従業員情報を取得し、eに格納。その後、findOne(id)でDB用をVIEW用にした戻り値を受ける
-        EmployeeView ev = service.findOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
+            //idを条件に従業員データを取得する
+            //findOneInternal(id)でDBからID検索で従業員情報を取得し、eに格納。その後、findOne(id)でDB用をVIEW用にした戻り値を受ける
+            EmployeeView ev = service.findOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
 
-        //もしevが空か、evが削除済になっていたら、
-        if(ev ==null || ev.getDeleteFlag()==AttributeConst.DEL_FLAG_TRUE.getIntegerValue()) {
+            //もしevが空か、evが削除済になっていたら、
+            if(ev ==null || ev.getDeleteFlag()==AttributeConst.DEL_FLAG_TRUE.getIntegerValue()) {
 
-            //データが取得できなかった、または論理削除されている場合はエラー画面を表示
-            forward(ForwardConst.FW_ERR_UNKNOWN);
-            return;                                         //このreturnは何を戻している？
+                //データが取得できなかった、または論理削除されている場合はエラー画面を表示
+                forward(ForwardConst.FW_ERR_UNKNOWN);
+                return;                                         //このreturnは何を戻している？
+            }
+
+            putRequestScope(AttributeConst.EMPLOYEE, ev); //取得した従業員情報をリクエストスコープに保存
+
+            //詳細画面show.jspにフォワード
+            forward(ForwardConst.FW_EMP_SHOW);
         }
-
-        putRequestScope(AttributeConst.EMPLOYEE, ev); //取得した従業員情報をリクエストスコープに保存
-
-        //詳細画面show.jspにフォワード
-        forward(ForwardConst.FW_EMP_SHOW);
     }
 
     /**
-     * 編集画面を表示する
+     * 従業員情報の編集画面を表示する。見れるのは管理者のみ
      * @throws ServletException
      * @throws IOException
      */
     public void edit() throws ServletException, IOException {
 
-        //idを条件に従業員データを取得する
-        EmployeeView ev = service.findOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
+        //管理者かどうかのチェック //追記
+        if (checkAdmin()) {
 
-        if(ev==null || ev.getDeleteFlag()==AttributeConst.DEL_FLAG_TRUE.getIntegerValue()) {
+            //idを条件に従業員データを取得する
+            EmployeeView ev = service.findOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
 
-            //データが取得できなかった、または論理削除されている場合はエラー画面を表示
-            forward(ForwardConst.FW_ERR_UNKNOWN);
-            return;   //このreturn；は何を返すのか？
+            if(ev==null || ev.getDeleteFlag()==AttributeConst.DEL_FLAG_TRUE.getIntegerValue()) {
+
+                //データが取得できなかった、または論理削除されている場合はエラー画面を表示
+                forward(ForwardConst.FW_ERR_UNKNOWN);
+                return;   //このreturn；は何を返すのか？
+            }
+
+            //CSRF対策用トークン
+            putRequestScope(AttributeConst.TOKEN, getTokenId());
+
+            //DBからID検で取得したev情報をリクエストスコープに保存する
+            putRequestScope(AttributeConst.EMPLOYEE, ev);
+
+            //編集画面を表示する
+            forward(ForwardConst.FW_EMP_EDIT);
         }
-
-        putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
-
-        //DBからID検で取得したev情報をリクエストスコープに保存する
-        putRequestScope(AttributeConst.EMPLOYEE, ev);
-
-        //編集画面を表示する
-        forward(ForwardConst.FW_EMP_EDIT);
-
     }
 
     /**
-     * 更新を行う
+     * 従業員情報の更新を行う。更新できるのは管理者のみ
      * @throws ServletException
      * @throws IOException
      */
@@ -187,8 +219,8 @@ public class EmployeeAction extends ActionBase {
 
     public void update() throws ServletException, IOException{
 
-      //CSRF対策 tokenのチェック
-        if(checkToken()) {
+      //CSRF対策 tokenのチェックと管理者権限のチェック
+        if(checkToken() && checkAdmin()) {
             //パラメータの値を元に従業員情報のインスタンスを作成する
 
             EmployeeView ev = new EmployeeView(
@@ -229,14 +261,14 @@ public class EmployeeAction extends ActionBase {
     }
 
     /**
-     * 論理削除を行う
+     * 論理削除を行う 削除できるのは管理者のみ
      * @throws ServletException
      * @throws IOException
      */
     public void destroy() throws ServletException, IOException{
 
-        //CSRF対策 tokenのチェック
-        if(checkToken()) {
+        //CSRF対策 tokenのチェックと管理者権限のチェック
+        if(checkToken() && checkAdmin()) {
 
             //idを条件に論理削除を行う
             service.destroy(toNumber(getRequestParam(AttributeConst.EMP_ID)));
@@ -247,14 +279,33 @@ public class EmployeeAction extends ActionBase {
 
             //一覧画面にリダイレクトする
             redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_INDEX);
-
         }
-
-
-
     }
 
+    /**
+     * ログイン中の従業員が管理者かどうかチェックし、管理者でなければエラー画面を表示
+     * @return 管理者:true  管理者ではない:false
+     * @throws ServletException
+     * @throws IOException
+     */
+    private boolean checkAdmin() throws ServletException, IOException{
 
+        //セッションからログイン中の従業員情報を取得
+        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+        //"login_employee"のセッションスコープを取得。キャスト変換しなくてもev型になっているのでは？セッション内でどういう状態？
+
+
+        //管理者でなければエラー画面を表示
+        if(ev.getAdminFlag() != AttributeConst.ROLE_ADMIN.getIntegerValue()){
+         //ev.getAdminFlag().equals(AttributeConst.ROLE_ADMIN.getIntegerValue())でもOK?
+
+         forward(ForwardConst.FW_ERR_UNKNOWN);
+         return false;
+
+     } else {
+         return true;
+     }
+    }
 
 
 
