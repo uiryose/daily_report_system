@@ -23,7 +23,7 @@
     <div id="wrapper">
         <div id="header">
             <div id="header_menu">
-                <h1><a href="<c:url value='?/aciton=${actTop}&command=${commIdx}' />">日報管理システム</a></h1>&nbsp;&nbsp;&nbsp;
+                <h1><a href="<c:url value='?action=${actTop}&command=${commIdx}' />">日報管理システム</a></h1>&nbsp;&nbsp;&nbsp;
 
    <!-- ログインした従業員の権限によって表示メニューを変える。管理者フラグが管理者1で一致していたら。［従業員管理］を表示 -->
                 <!-- sessionScope.login_employee.adminFlagで.の連結が不安 -->
