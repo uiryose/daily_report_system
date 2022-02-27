@@ -8,9 +8,9 @@
 
 
 
-<c:import url="/WEB-INF/views/layout/app.jsp">    <!-- webappからのファイルパス？？ -->
+<c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
-        <c:if test="${loginError}">    <!-- "loginError"の文字はテキスト内の適切な箇所にコード記載がないがどこから…？ -->
+        <c:if test="${loginError}">     <!-- "loginError"の文字はテキスト内の適切な箇所にコード記載がないがどこから…？ -->
                                         <!-- AttributeConst.LOGIN_ERR==>"loginError" :AuthActionでリクエストスコープに設定している-->
             <div id="flush_error">
                 社員番号かパスワードが間違っています。
