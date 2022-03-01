@@ -142,4 +142,23 @@ public class ReportAction extends ActionBase{
     }
 
 
+    public void show() throws ServletException, IOException{
+
+        //idを条件に日報データをDBから取得する
+        ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+
+        if(rv==null) {
+            //該当するデータがなければエラー画面を表示
+            forward(ForwardConst.FW_ERR_UNKNOWN);
+        } else {
+
+            //リクエストスコープの"report"にDBのレポート情報(idひとつ分)を保存する。
+            //show.jspではリクエストスコープから情報を読み込む
+            putRequestScope(AttributeConst.REPORT, rv);
+        }
+        //詳細画面を表示
+        forward(ForwardConst.FW_REP_SHOW);
+    }
+
+
 }
