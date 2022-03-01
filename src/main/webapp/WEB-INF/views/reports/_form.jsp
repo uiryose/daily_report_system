@@ -19,8 +19,8 @@
 <label for="${AttributeConst.REP_DATE.getValue()}">日付</label><br>
     <!-- for==>関連付けたいフォーム部品(今回はinput)のidかname属性を指定。 -->
 
-<input type="date" name="${AttributeCOnst.REP_DATE.getValue()}" value="<fmt:formatDate value='${reportDay}' pattern='yyyy-MM-dd'/>"/>
-    <!-- type==>dateはカレンダーを表示　　value==>カレンダーを選ぶ前の初期値 -->
+<input type="date" name="${AttributeConst.REP_DATE.getValue()}" value="<fmt:formatDate value='${reportDay}' pattern='yyyy-MM-dd'/>"/>
+    <!-- type==>dateはカレンダーを表示　　value==>カレンダーを選ぶ前の初期値 name==>パラメータに送られる日付-->
 
 <br><br>
 
