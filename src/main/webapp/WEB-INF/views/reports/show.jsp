@@ -39,6 +39,7 @@
         </tbody>
     </table>
 
+<!-- ログインIDとレポートのIDが一致していたら修正のリンクを表示する -->
     <c:if test="${sessionScope.login_employee.id==report.employee.id}">
         <p>                                                       <!--   このreportはどこから繋がっているか   -->
             <a href="<c:url value='?action=${actRep}&command=${commEdt}&id=${report.id}'/>">この日報を修正する</a>
