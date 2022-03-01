@@ -165,7 +165,11 @@ public class ReportAction extends ActionBase{
     }
 
 
-
+    /**
+     * 編集画面を表示する
+     * @throws ServletException
+     * @throws IOException
+     */
     public void edit() throws ServletException, IOException{
 
         //リクエストパラメータのidを条件にDBから日報データを取得する
@@ -191,5 +195,48 @@ public class ReportAction extends ActionBase{
         }
     }
 
+    /**
+     * レポートの更新を行う
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void update() throws ServletException, IOException{
+
+        //CSRF対策 tokenのチェック
+        if (checkToken()) {
+
+            //idを条件にDBから日報データを取得する
+            ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+
+            //編集画面に入力された日報内容(日付、タイトル、内容)をrvに上書きで設定する
+            rv.setReportDate(toLocalDate(getRequestParam(AttributeConst.REP_DATE)));
+            rv.setTitle(getRequestParam(AttributeConst.REP_TITLE));
+            rv.setContent(getRequestParam(AttributeConst.REP_CONTENT));
+
+            //DBの日報データを更新する
+            List<String> errors = service.update(rv);
+
+            if (errors.size() > 0) {
+                //更新中にエラーが発生した場合
+                //編集画面を再表示する。この画面にリクエストスコープに保存した更新できなかったデータを再表示
+
+                //tokenは結局なぜ？
+                putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
+                putRequestScope(AttributeConst.REPORT, rv); //入力された日報情報
+                putRequestScope(AttributeConst.ERR, errors); //エラーのリスト
+
+                forward(ForwardConst.FW_REP_EDIT);
+
+            } else {
+                //更新中にエラーがなかった場合
+
+                //セッションに更新完了のフラッシュメッセージを設定
+                putSessionScope(AttributeConst.FLUSH, MessageConst.I_DELETED.getMessage());
+
+                //一覧画面にリダイレクト
+                redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);   //("Report","index")
+            }
+        }
+    }
 
 }
