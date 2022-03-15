@@ -25,13 +25,17 @@
             <div id="header_menu">
                 <h1><a href="<c:url value='?action=${actTop}&command=${commIdx}' />">日報管理システム</a></h1>&nbsp;&nbsp;&nbsp;
 
-   <!-- ログインした従業員の権限によって表示メニューを変える。管理者フラグが管理者1で一致していたら。［従業員管理］を表示 -->
-                <!-- sessionScope.login_employee.adminFlagで.の連結が不安 -->
-                <c:if test="${sessionScope.login_employee.adminFlag == AttributeConst.ROLE_ADMIN.getIntegerValue()}">
-                    <a href="<c:url value='?action=${actEmp}&command=${commIdx}' />">従業員管理</a>&nbsp;
+                <c:if test="${sessionScope.login_employee != null}">
+
+       <!-- ログインした従業員の権限によって表示メニューを変える。管理者フラグが管理者1で一致していたら。［従業員管理］を表示 -->
+                    <!-- sessionScope.login_employee.adminFlagで.の連結が不安 -->
+                    <c:if test="${sessionScope.login_employee.adminFlag == AttributeConst.ROLE_ADMIN.getIntegerValue()}">
+                        <a href="<c:url value='?action=${actEmp}&command=${commIdx}' />">従業員管理</a>&nbsp;
+                    </c:if>
+       <!-- 共通で[日報管理]を表示。action="Report" command="index" -->
+                    <a href="<c:url value='?action=${actRep}&command=${commIdx}' />">日報管理</a>&nbsp;
+
                 </c:if>
-   <!-- 共通で[日報管理]を表示。action="Report" command="index" -->
-                <a href="<c:url value='?action=${actRep}&command=${commIdx}' />">日報管理</a>&nbsp;
 
             </div>
     <!-- ログイン(セッションスコープにlogin_employeeの情報がある)していれば、ヘッダーの右上に名前とログアウトボタンを設置 -->
