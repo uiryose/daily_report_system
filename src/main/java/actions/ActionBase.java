@@ -24,6 +24,8 @@ import constants.PropertyConst;
 public abstract class ActionBase {
 
     protected ServletContext context;
+
+    //doGet doPostメソッドの引数に利用。パラメータ受渡し、JSPの呼び出し、リダイレクト処理でも活用
     protected HttpServletRequest request;
     protected HttpServletResponse response;
 
@@ -45,6 +47,13 @@ public abstract class ActionBase {
         this.request = servletRequest;
         this.response = servletResponse;
     }
+
+//    public void init1(ServletContext servletContext1) {
+//        this.context = servletContext1;
+//  //initメソッドで引数を渡したら、フィールドのcontextが引数の値になる。
+     //ServletContextとはどんな引数なのか・・・？init()はどう使うのか？
+//    }
+
 
     /**
      * フロントコントローラから呼び出されるメソッド
@@ -74,7 +83,6 @@ public abstract class ActionBase {
             commandMethod = this.getClass().getDeclaredMethod(command, new Class[0]);
             //Method型の変数commandMethodには何が入っている・・・？
 
-            //入れ子のようでややこしい・・・。どういう処理？
             commandMethod.invoke(this, new Object[0]);
 
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
@@ -162,6 +170,8 @@ public abstract class ActionBase {
         int page;
              //toNumberは下で別途定義。int化するだけ  //AttributeConst.PAGE=="page"という文字列をgetValue()で取得
         page = toNumber(request.getParameter(AttributeConst.PAGE.getValue()));
+
+                //Integerの最小値－21億？と比較。なぜ？
         if(page == Integer.MIN_VALUE) {
             page = 1;
         }

@@ -27,7 +27,7 @@ public class ReportService extends ServiceBase {
     public List<ReportView> getMinePerPage(EmployeeView employee, int page){
 
 //employeeのときと一緒。中身の疑問点を確認
-        List<Report> reports = em.createNamedQuery(JpaConst.Q_REP_COUNT_ALL_MINE, Report.class)
+        List<Report> reports = em.createNamedQuery(JpaConst.Q_REP_GET_ALL_MINE, Report.class)
                 .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(employee))
                 .setFirstResult(JpaConst.ROW_PER_PAGE * (page - 1))
                 .setMaxResults(JpaConst.ROW_PER_PAGE)

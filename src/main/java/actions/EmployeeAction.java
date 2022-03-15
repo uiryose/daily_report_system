@@ -27,6 +27,7 @@ public class EmployeeAction extends ActionBase {
     @Override
     public void process() throws ServletException, IOException {
 
+        //このprocessメソッド内の流れがよくわからない。
         service = new EmployeeService();
 
         //メソッドを実行。パラメータからcommandを取得し、それを実行する。不正なコマンドならエラー画面にフォワード
