@@ -17,34 +17,52 @@ public class EmployeeService extends ServiceBase {
     /**
      * 指定されたページ数の一覧画面に表示するデータを取得し、EmployeeViewのリストで返却する
      * @param page ページ数
+     * @param delFlag 論理削除を含める場合:true 含めない場合;false
      * @return 表示するデータのリスト
      */
-
-    public List<EmployeeView> getPerPage(int page) {
+    public List<EmployeeView> getPerPage(int page, boolean delFlag) {
                                         //ENTITY_EMP + ".getAll"; //name
         //「JpaConst.Q_EMP_GET_ALL」という名前でSQL文"SELECT e FROM Employee AS e ORDER BY e.id DESC"を定義している
-        //第2引数の「Employee.class」は何を表しているのか？
+        if(delFlag) {
 
-        List<Employee> employees = em.createNamedQuery(JpaConst.Q_EMP_GET_ALL, Employee.class)
-                .setFirstResult(JpaConst.ROW_PER_PAGE * (page - 1))    //SQLでDB検索をし、従業員データからid順で、1番目から
-                .setMaxResults(JpaConst.ROW_PER_PAGE)                  //15個までを取得し、
-                .getResultList();                                       //クエリーインスタンスに結果をリストで格納する
+            List<Employee> employees = em.createNamedQuery(JpaConst.Q_EMP_GET_ALL, Employee.class)
+                    .setFirstResult(JpaConst.ROW_PER_PAGE * (page - 1))    //SQLでDB検索をし、従業員データからid順で、1番目から
+                    .setMaxResults(JpaConst.ROW_PER_PAGE)                  //15個までを取得し、
+                    .getResultList();                                       //クエリーインスタンスに結果をリストで格納する
 
-        return EmployeeConverter.toViewList(employees);     //DB用のリストをビュー用に変換する
+            return EmployeeConverter.toViewList(employees);     //DB用のリストをビュー用に変換する
+        }else {
 
+            //論理削除を含めない在籍社員
+            List<Employee> employees = em.createNamedQuery(JpaConst.Q_EMP_GET_ALL_REM_DEL, Employee.class)
+                    .setFirstResult(JpaConst.ROW_PER_PAGE * (page - 1))    //SQLでDB検索をし、従業員データからid順で、1番目から
+                    .setMaxResults(JpaConst.ROW_PER_PAGE)                  //15個までを取得し、
+                    .getResultList();                                       //クエリーインスタンスに結果をリストで格納する
+
+            return EmployeeConverter.toViewList(employees);     //DB用のリストをビュー用に変換する
+        }
     }
 
 
     /**
      * 従業員テーブルのデータの件数を取得し、返却する
+     * @deleteFlag 論理削除を含める場合はtrue 含めない場合はfalse
      * @return 従業員テーブルのデータの件数
      */
-    public long countAll() {
+    public long countAll(boolean deleteFlag) {
 
-        //「JpaConst.Q_EMP_COUNT」という名前でSQL文"SELECT COUNT(e) FROM Employee AS e"を定義している
-        long empCount = (long) em.createNamedQuery(JpaConst.Q_EMP_COUNT, Long.class).getSingleResult();
-                                                //Long.classとlong.classでは全く異なる？どういう構文？
-        return empCount;
+        if(deleteFlag) {
+
+            //「JpaConst.Q_EMP_COUNT」という名前でSQL文"SELECT COUNT(e) FROM Employee AS e"を定義している
+            long empCount = (long) em.createNamedQuery(JpaConst.Q_EMP_COUNT, Long.class).getSingleResult();
+            return empCount;
+
+        } else {
+
+            //論理削除を除いた件数
+            long empCount = (long) em.createNamedQuery(JpaConst.Q_EMP_COUNT_REM_DEL, Long.class).getSingleResult();
+            return empCount;
+        }
     }
 
     /**
@@ -169,25 +187,24 @@ public class EmployeeService extends ServiceBase {
 
         }
 
-        savedEmp.setName(ev.getName());  //変更後の氏名を設定する >>>変更後の名前はどこで入力・取得している？
+        savedEmp.setName(ev.getName());
+
         savedEmp.setAdminFlag(ev.getAdminFlag());  //変更後の管理者フラグを設定する
+
+        savedEmp.setPositionFlag(ev.getPositionFlag());  //変更後の役職フラグを設定する
+        System.out.println("test2です" + savedEmp.getPositionFlag());
 
         //更新日時に現在時刻を設定する
         LocalDateTime today = LocalDateTime.now();
         savedEmp.setUpdatedAt(today);
 
 
-
         //更新内容についてバリデーションを行う
         List<String> errors = EmployeeValidator.validate(this, savedEmp, validateCode, validatePass);
 
 
-
-
-
-
         if(errors.size() ==0) {
-            update(savedEmp);  //上のupdate()は引数2つで、Stringが必要・・・下で別途定義する
+            update(savedEmp);
         }
 
         return errors;
@@ -272,7 +289,6 @@ public class EmployeeService extends ServiceBase {
     private void update(EmployeeView ev) {
         em.getTransaction().begin();
         Employee e = findOneInternal(ev.getId());
-        //evのビューモデルを、DB用のeモデルに変換する。結局何が違う…？
         EmployeeConverter.copyViewToModel(e, ev);
         em.getTransaction().commit();
 

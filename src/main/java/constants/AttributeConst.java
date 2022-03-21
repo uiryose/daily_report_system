@@ -33,9 +33,17 @@ public enum AttributeConst {
     EMP_NAME("name"),
     EMP_ADMIN_FLG("admin_flag"),
 
+    EMP_POSITION_FLG("position_flag"),
+    EMP_FOLLOW("follow"),
+
     //管理者フラグ
     ROLE_ADMIN(1),
     ROLE_GENERAL(0),
+
+    //役職フラグ
+    POSITION_TOP(2), //役員
+    POSITION_MID(1), //部長
+    POSITION_LOW(0), //社員
 
     //削除フラグ
     DEL_FLAG_TRUE(1),  //削除済み？

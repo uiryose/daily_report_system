@@ -41,7 +41,17 @@ import lombok.Setter;
                 //社員番号とハッシュ化済パスワードを条件に未削除の従業員を取得する.
                 //従業員がログインするときに社員番号とパスワードが正しいかをチェックするためのものです。
                 name = JpaConst.Q_EMP_GET_BY_CODE_AND_PASS, //==> ENTITY_EMP + ".getByCodeAndPass" ==> employee + ".getByCodeAndPass"
-                query = JpaConst.Q_EMP_GET_BY_CODE_AND_PASS_DEF)//==>  "SELECT COUNT(e) FROM Employee AS e WHERE e.code = :" + JPQL_PARM_CODE
+                query = JpaConst.Q_EMP_GET_BY_CODE_AND_PASS_DEF),//==>  "SELECT COUNT(e) FROM Employee AS e WHERE e.code = :" + JPQL_PARM_CODE
+
+        @NamedQuery(
+                name = JpaConst.Q_EMP_GET_ALL_REM_DEL,
+                query = JpaConst.Q_EMP_GET_ALL_REM_DEL_DEF),
+
+        @NamedQuery(
+                name = JpaConst.Q_EMP_COUNT_REM_DEL,
+                query = JpaConst.Q_EMP_COUNT_DEF_REM_DEL)
+
+
 })
 
 @Getter //全てのクラスフィールドについてgetterを自動生成する(Lombok)
@@ -97,5 +107,14 @@ public class Employee {
      */
     @Column(name = JpaConst.EMP_COL_DELETE_FLAG, nullable = false)
     private Integer deleteFlag;
+
+
+    /**
+     * 従業員の役職（社員：0、部長：1、役員；2）
+     */
+    @Column(name = JpaConst.EMP_COL_POSITION_FLAG, nullable = true)
+    private Integer positionFlag;
+
+
 
 }

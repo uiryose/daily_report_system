@@ -36,7 +36,6 @@ public abstract class ActionBase {
      * @param servletResponse
      */
 
-    //上記のフィールドの考え方？がよくわからない
 
     public void init(
             ServletContext servletContext,
@@ -47,12 +46,6 @@ public abstract class ActionBase {
         this.request = servletRequest;
         this.response = servletResponse;
     }
-
-//    public void init1(ServletContext servletContext1) {
-//        this.context = servletContext1;
-//  //initメソッドで引数を渡したら、フィールドのcontextが引数の値になる。
-     //ServletContextとはどんな引数なのか・・・？init()はどう使うのか？
-//    }
 
 
     /**
@@ -81,7 +74,6 @@ public abstract class ActionBase {
             //(例: action=Employee command=show の場合 EmployeeActionクラスのshow()メソッドを実行する)
             //getDeclareMethod(xx)でパラメータで指定されたメソッドを、クラスから呼び出す
             commandMethod = this.getClass().getDeclaredMethod(command, new Class[0]);
-            //Method型の変数commandMethodには何が入っている・・・？
 
             commandMethod.invoke(this, new Object[0]);
 
@@ -101,11 +93,9 @@ public abstract class ActionBase {
      * @throws ServletException
      * @throws IOException
      */
-                            //enum型
     protected void forward(ForwardConst target) throws ServletException, IOException {
 
         //jspファイルの相対パスを作成
-                                                        //%s:toString()として出力する
         String forward = String.format("/WEB-INF/views/%s.jsp", target.getValue());
         RequestDispatcher dispatcher = request.getRequestDispatcher(forward);
 
@@ -171,7 +161,6 @@ public abstract class ActionBase {
              //toNumberは下で別途定義。int化するだけ  //AttributeConst.PAGE=="page"という文字列をgetValue()で取得
         page = toNumber(request.getParameter(AttributeConst.PAGE.getValue()));
 
-                //Integerの最小値－21億？と比較。なぜ？
         if(page == Integer.MIN_VALUE) {
             page = 1;
         }
@@ -188,7 +177,7 @@ public abstract class ActionBase {
         try {
             number = Integer.parseInt(strNumber);
         } catch (Exception e) {
-            number = Integer.MIN_VALUE;  //エラーチェックの便宜上int型の最小値を代入
+            number = Integer.MIN_VALUE;
         }
         return number;
     }
@@ -212,7 +201,6 @@ public abstract class ActionBase {
      * @return パラメータの値
      */
     protected String getRequestParam(AttributeConst key) {
-                              //keyにはEMP_ID、REP_COUNTなどA-Constで設定したものが来る
         return request.getParameter(key.getValue());
     }
 

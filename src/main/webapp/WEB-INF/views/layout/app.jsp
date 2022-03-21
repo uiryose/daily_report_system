@@ -10,6 +10,7 @@
 
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commOut" value="${ForwardConst.CMD_LOGOUT.getValue()}" />
+<c:set var="commAll" value="${ForwardConst.CMD_ALL.getValue()}" />
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -36,6 +37,7 @@
                     <a href="<c:url value='?action=${actRep}&command=${commIdx}' />">日報管理</a>&nbsp;
 
                 </c:if>
+           <a href="<c:url value='?action=${actEmp}&command=${commAll}' />">在籍社員</a>&nbsp;
 
             </div>
     <!-- ログイン(セッションスコープにlogin_employeeの情報がある)していれば、ヘッダーの右上に名前とログアウトボタンを設置 -->

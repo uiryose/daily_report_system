@@ -12,6 +12,7 @@ public enum ForwardConst {
     ACT_EMP("Employee"),
     ACT_REP("Report"),
     ACT_AUTH("Auth"),
+    ACT_ALL("All"),
 
     //command
     CMD("command"),
@@ -26,6 +27,8 @@ public enum ForwardConst {
     CMD_EDIT("edit"),
     CMD_UPDATE("update"),
     CMD_DESTROY("destroy"),
+    CMD_ALL("all"),
+    CMD_FOLLOW("follow"),
 
     //jsp
     FW_ERR_UNKNOWN("error/unknown"),
@@ -35,6 +38,8 @@ public enum ForwardConst {
     FW_EMP_SHOW("employees/show"),
     FW_EMP_NEW("employees/new"),
     FW_EMP_EDIT("employees/edit"),
+    FW_EMP_ALL("employees/all"),        //追加
+    FW_EMP_FOLLOW("employees/follow"),  //追加
     FW_REP_INDEX("reports/index"),
     FW_REP_SHOW("reports/show"),
     FW_REP_NEW("reports/new"),

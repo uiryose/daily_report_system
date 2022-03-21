@@ -24,10 +24,18 @@ public interface JpaConst {
     String EMP_COL_UPDATED_AT = "updated_at"; //更新日時
     String EMP_COL_DELETE_FLAG = "delete_flag"; //削除フラグ
 
+    String EMP_COL_POSITION_FLAG = "position_flag";
+    String EMP_COL_FOLLOW = "follow";
+
     int ROLE_ADMIN = 1; //管理者権限ON(管理者)
     int ROLE_GENERAL = 0; //管理者権限OFF(一般)
     int EMP_DEL_TRUE = 1; //削除フラグON(削除済み)
     int EMP_DEL_FALSE = 0; //削除フラグOFF(現役)
+
+    int POSITION_TOP = 2; //役員
+    int POSITION_MID = 1; //部長
+    int POSITION_LOW = 0; //社員
+
 
     //日報テーブル
     String TABLE_REP = "reports"; //テーブル名
@@ -48,6 +56,12 @@ public interface JpaConst {
     String JPQL_PARM_CODE = "code"; //社員番号
     String JPQL_PARM_PASSWORD = "password"; //パスワード
     String JPQL_PARM_EMPLOYEE = "employee"; //従業員
+
+    String JPQL_PARM_DELET_FLG = "delete_flag"; //削除フラグ
+
+    int JPQL_DEL_TRUE = 1; //削除フラグON(削除済み)
+    int JPQL_DEL_FALSE = 0; //削除フラグOFF(現役)            //JPQL用に別途定義する？カラム名
+
 
     //NamedQueryの nameとquery
     //全ての従業員をidの降順に取得する
@@ -75,4 +89,11 @@ public interface JpaConst {
     String Q_REP_COUNT_ALL_MINE = ENTITY_REP + ".countAllMine";
     String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
 
+    //論理削除を除く全ての従業員
+    String Q_EMP_GET_ALL_REM_DEL = ENTITY_EMP + ".getAllRemDel"; //name
+    String Q_EMP_GET_ALL_REM_DEL_DEF = "SELECT e FROM Employee AS e WHERE " + JPQL_PARM_DELET_FLG + " = "+EMP_DEL_FALSE+"  ORDER BY e.id DESC"; //query
+
+    //論理削除を除く全ての従業員の件数を取得する
+    String Q_EMP_COUNT_REM_DEL = ENTITY_EMP + ".countRemDel";
+    String Q_EMP_COUNT_DEF_REM_DEL = "SELECT COUNT(e) FROM Employee AS e WHERE " +  JPQL_PARM_DELET_FLG + "="+ EMP_DEL_FALSE ;
 }

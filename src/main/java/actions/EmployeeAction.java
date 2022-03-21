@@ -51,10 +51,10 @@ public class EmployeeAction extends ActionBase {
 
             //指定されたページ数の一覧画面に表示するデータを取得
             int page = getPage(); //パラメータから"page"に対応する情報を数値で取得する
-            List<EmployeeView> employees = service.getPerPage(page); //1-15,16-30ごと従業員情報を取得？
+            List<EmployeeView> employees = service.getPerPage(page, true); //1-15,16-30ごと従業員情報を取得？
 
             //全ての従業員データの件数を取得
-            long employeeCount = service.countAll();
+            long employeeCount = service.countAll(true);
 
             //リクエストスコープにそれぞれパラメータを保存
             putRequestScope(AttributeConst.EMPLOYEES, employees);//取得した従業員データ
@@ -120,7 +120,8 @@ public class EmployeeAction extends ActionBase {
                     toNumber(getRequestParam(AttributeConst.EMP_ADMIN_FLG)), //文字列0or1を取得し、toNumberでIntegerにする
                     null,
                     null,
-                    AttributeConst.DEL_FLAG_FALSE.getIntegerValue());  //this.iでDEL_FLAG_FALSEの0を返す。
+                    AttributeConst.DEL_FLAG_FALSE.getIntegerValue(),
+                    toNumber(getRequestParam(AttributeConst.EMP_POSITION_FLG)));
 
             //アプリケーションスコープからpepper文字列を取得
             String pepper = getContextScope(PropertyConst.PEPPER);  //contextが絡む処理が理解できていない…pepperて何？
@@ -211,13 +212,12 @@ public class EmployeeAction extends ActionBase {
         }
     }
 
+
     /**
      * 従業員情報の更新を行う。更新できるのは管理者のみ
      * @throws ServletException
      * @throws IOException
      */
-
-
     public void update() throws ServletException, IOException{
 
       //CSRF対策 tokenのチェックと管理者権限のチェック
@@ -232,7 +232,10 @@ public class EmployeeAction extends ActionBase {
                     toNumber(getRequestParam(AttributeConst.EMP_ADMIN_FLG)),
                     null,
                     null,
-                    AttributeConst.DEL_FLAG_FALSE.getIntegerValue());
+                    AttributeConst.DEL_FLAG_FALSE.getIntegerValue(),
+                    toNumber(getRequestParam(AttributeConst.EMP_POSITION_FLG)));
+
+            System.out.println("testです:"+ev.getPositionFlag());
 
             //アプリケーションスコープからpepper文字列を取得
             String pepper = getContextScope(PropertyConst.PEPPER);
@@ -304,11 +307,40 @@ public class EmployeeAction extends ActionBase {
          return false;
 
      } else {
+
          return true;
      }
     }
 
 
+    public void all() throws ServletException, IOException {
 
+
+
+            //指定されたページ数の一覧画面に表示するデータを取得
+            int page = getPage();
+            List<EmployeeView> employees = service.getPerPage(page, false);
+
+            //全ての従業員データの件数を取得
+            long employeeCount = service.countAll(false);
+
+            //リクエストスコープにそれぞれパラメータを保存
+            putRequestScope(AttributeConst.EMPLOYEES, employees);//取得した従業員データ
+            putRequestScope(AttributeConst.EMP_COUNT, employeeCount);//全ての従業員データの件数
+            putRequestScope(AttributeConst.PAGE, page); //ページ数
+            putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE);//1ページに表示するレコードの数
+
+
+            //いつflush文をセッションスコープに保存しているのか？
+            String flush = getSessionScope(AttributeConst.FLUSH);
+
+            if (flush != null) {
+                putRequestScope(AttributeConst.FLUSH, flush); //文字列flushがあったらリクエストスコープに保存
+                removeSessionScope(AttributeConst.FLUSH); //セッションスコープからは削除する
+            }
+
+            //一覧画面を表示
+            forward(ForwardConst.FW_EMP_ALL);
+        }
 
 }

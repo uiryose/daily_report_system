@@ -43,6 +43,24 @@
 </select>
 
 <br><br>
+<label for="${AttributeConst.EMP_POSITION_FLG.getValue()}">役職</label><br>
+<select name="${AttributeConst.EMP_POSITION_FLG.getValue()}" >
+    <option value="${AttuributeConst.POSITION_LOW.getIntegerValue()}"
+        <c:if test="${employee.positionFlag==AttributeConst.POSITION_LOW.getIntegerValue()}"> selected</c:if>>
+        社員
+    </option>
+    <option value="${AttributeConst.POSITION_MID.getIntegerValue()}"
+        <c:if test="${employee.positionFlag == AttributeConst.POSITION_MID.getIntegerValue()}"> selected</c:if>>
+        部長
+    </option>
+    <option value="${AttributeConst.POSITION_TOP.getIntegerValue()}"
+        <c:if test="${employee.positionFlag == AttributeConst.POSITION_TOP.getIntegerValue()}"> selected</c:if>>
+        役員
+    </option>
+</select>
+
+
+<br><br>
 <input type="hidden" name="${AttributeConst.EMP_ID.getValue()}" value="${employee.id}" />
 <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}" />
 <button type="submit">投稿</button>
