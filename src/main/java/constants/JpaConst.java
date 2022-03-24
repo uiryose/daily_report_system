@@ -25,7 +25,6 @@ public interface JpaConst {
     String EMP_COL_DELETE_FLAG = "delete_flag"; //削除フラグ
 
     String EMP_COL_POSITION_FLAG = "position_flag";
-    String EMP_COL_FOLLOW = "follow";
 
     int ROLE_ADMIN = 1; //管理者権限ON(管理者)
     int ROLE_GENERAL = 0; //管理者権限OFF(一般)
@@ -48,16 +47,30 @@ public interface JpaConst {
     String REP_COL_CREATED_AT = "created_at"; //登録日時
     String REP_COL_UPDATED_AT = "updated_at"; //更新日時
 
+    //フォローテーブル
+    String TABLE_FOL = "follows"; //テーブル名
+    //フォローテーブルカラム
+    String FOL_COL_ID = "id"; //id
+    String FOL_COL_MY_ID = "my_id"; //自分の従業員id
+    String FOL_COL_FOL_ID = "follow_id"; //フォロー先の従業員のid
+    String FOL_COL_CREATED_AT = "created_at"; //登録日時
+
     //Entity名
     String ENTITY_EMP = "employee"; //従業員
     String ENTITY_REP = "report"; //日報
 
+    String ENTITY_FOL = "follow"; //フォロー
+
     //JPQL内パラメータ
+
+    String JPQL_PARM_ID = "id"; //社員番号
     String JPQL_PARM_CODE = "code"; //社員番号
     String JPQL_PARM_PASSWORD = "password"; //パスワード
     String JPQL_PARM_EMPLOYEE = "employee"; //従業員
 
     String JPQL_PARM_DELET_FLG = "delete_flag"; //削除フラグ
+
+    String JPQL_PARM_FOLLOW = "follow"; //フォロー
 
     int JPQL_DEL_TRUE = 1; //削除フラグON(削除済み)
     int JPQL_DEL_FALSE = 0; //削除フラグOFF(現役)            //JPQL用に別途定義する？カラム名
@@ -96,4 +109,15 @@ public interface JpaConst {
     //論理削除を除く全ての従業員の件数を取得する
     String Q_EMP_COUNT_REM_DEL = ENTITY_EMP + ".countRemDel";
     String Q_EMP_COUNT_DEF_REM_DEL = "SELECT COUNT(e) FROM Employee AS e WHERE " +  JPQL_PARM_DELET_FLG + "="+ EMP_DEL_FALSE ;
+
+    //自分のidを元にフォローしている従業員idを取得する
+    String Q_FOL_GET_ALL = ENTITY_FOL + ".getFollow";
+    String Q_FOL_GET_ALL_DEF = "SELECT f FROM Follow AS f WHERE my_id = " +  JPQL_PARM_ID +" ORDER BY f.id DESC";
+
+    //自分のidとフォロー先のidがをテーブルに保存する
+
+    //自分のidとフォロー先のidが一致するレコードを削除する
+
+
+
 }

@@ -34,7 +34,6 @@ public enum AttributeConst {
     EMP_ADMIN_FLG("admin_flag"),
 
     EMP_POSITION_FLG("position_flag"),
-    EMP_FOLLOW("follow"),
 
     //管理者フラグ
     ROLE_ADMIN(1),
@@ -56,7 +55,14 @@ public enum AttributeConst {
     REP_ID("id"),
     REP_DATE("report_date"),
     REP_TITLE("title"),
-    REP_CONTENT("content");
+    REP_CONTENT("content"),
+
+    //フォロー
+    FOLLOW("follow"),
+    FOL_MY_ID("my_id"),
+    FOL_FOLLOW_ID("follow_id");
+
+
 
     private final String text;
     private final Integer i;
