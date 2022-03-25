@@ -26,7 +26,6 @@ public class ReportService extends ServiceBase {
      */
     public List<ReportView> getMinePerPage(EmployeeView employee, int page){
 
-//employeeのときと一緒。中身の疑問点を確認
         List<Report> reports = em.createNamedQuery(JpaConst.Q_REP_GET_ALL_MINE, Report.class)
                 .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(employee))
                 .setFirstResult(JpaConst.ROW_PER_PAGE * (page - 1))
@@ -43,7 +42,6 @@ public class ReportService extends ServiceBase {
      */
     public long countAllMine(EmployeeView employee) {
 
-//employeeのときと一緒。中身の疑問点を確認。SQL文："SELECT COUNT(r) FROM Report AS r WHERE r.employee = : employee"
         long count = (long) em.createNamedQuery(JpaConst.Q_REP_COUNT_ALL_MINE, Long.class)
               //.setParameter(employee, EVインスタンスをDTOモデルにしたもの）
                 .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(employee))
@@ -133,7 +131,7 @@ public class ReportService extends ServiceBase {
      * @return 取得データのインスタンス
      */
     private Report findOneInternal(int id) {
-        return em.find(Report.class, id);     //enum・・？構文の確認
+        return em.find(Report.class, id);
     }
 
     /**

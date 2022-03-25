@@ -19,7 +19,7 @@ import services.EmployeeService;
  */
 public class EmployeeAction extends ActionBase {
 
-    private EmployeeService service; //この変数には何が入る？ざっくりしすぎてイメージできない。
+    private EmployeeService service;
 
     /**
      * メソッドを実行する
@@ -27,13 +27,12 @@ public class EmployeeAction extends ActionBase {
     @Override
     public void process() throws ServletException, IOException {
 
-        //このprocessメソッド内の流れがよくわからない。
         service = new EmployeeService();
 
         //メソッドを実行。パラメータからcommandを取得し、それを実行する。不正なコマンドならエラー画面にフォワード
         invoke();
 
-        service.close(); //emのクローズ
+        service.close();
 
     }
 
@@ -65,7 +64,6 @@ public class EmployeeAction extends ActionBase {
             //セッションにフラッシュメッセージが設定されている場合はリクエストスコープに移し替え、セッションからは削除する
             //各アクションで「登録が完了しました」や「更新が完了しました」、「削除が完了しました」といった内容を一覧画面にフラッシュメッセージとして表示します。
 
-            //いつflush文をセッションスコープに保存しているのか？
             String flush = getSessionScope(AttributeConst.FLUSH);
 
             if (flush != null) {
@@ -73,7 +71,7 @@ public class EmployeeAction extends ActionBase {
                 removeSessionScope(AttributeConst.FLUSH); //セッションスコープからは削除する
             }
 
-            //一覧画面を表示     "employees/index"にフォワード
+            //一覧画面を表示
             forward(ForwardConst.FW_EMP_INDEX);
         }
     }
@@ -92,12 +90,11 @@ public class EmployeeAction extends ActionBase {
             putRequestScope(AttributeConst.TOKEN, getTokenId());
 
             //空の従業員インスタンス
-            //   putR-S==>request.setAttribute(key.getValue(), value);
             //リクエストスコープに"employee"=従業員インスタンスを保存する
             putRequestScope(AttributeConst.EMPLOYEE, new EmployeeView());
 
             //新規登録画面を表示
-            forward(ForwardConst.FW_EMP_NEW);   //    "/WEB-INF/views/%s.jsp"の%sに"employees/new"を当てる
+            forward(ForwardConst.FW_EMP_NEW);
         }
     }
 
@@ -127,8 +124,7 @@ public class EmployeeAction extends ActionBase {
             String pepper = getContextScope(PropertyConst.PEPPER);  //contextが絡む処理が理解できていない…pepperて何？
 
             //従業員情報登録
-            List<String> errors = service.create(ev, pepper);  //奥が深い…create(*,*)ハッシュ化したパス+日時をevに追加。エラーがあれば返す
-                                                               //エラーがなければcreate(*)でDBに登録までする
+            List<String> errors = service.create(ev, pepper);
 
             if(errors.size() > 0) {
                 //登録中にエラーがあった場合。リクエストスコープに３種の情報を保存する。
@@ -142,7 +138,6 @@ public class EmployeeAction extends ActionBase {
                 //登録中にエラーがなかった場合
 
                 //セッションに登録完了のフラッシュメッセージを設定
-                                                        //  I_REGISTERED==>("登録が完了しました。"),
                 putSessionScope(AttributeConst.FLUSH, MessageConst.I_REGISTERED.getMessage());
 
                 //一覧画面にリダイレクトする
@@ -163,7 +158,6 @@ public class EmployeeAction extends ActionBase {
         if (checkAdmin()) {
 
             //idを条件に従業員データを取得する
-            //findOneInternal(id)でDBからID検索で従業員情報を取得し、eに格納。その後、findOne(id)でDB用をVIEW用にした戻り値を受ける
             EmployeeView ev = service.findOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
 
             //もしevが空か、evが削除済になっていたら、
@@ -171,10 +165,11 @@ public class EmployeeAction extends ActionBase {
 
                 //データが取得できなかった、または論理削除されている場合はエラー画面を表示
                 forward(ForwardConst.FW_ERR_UNKNOWN);
-                return;                                         //このreturnは何を戻している？
+                return;
             }
 
-            putRequestScope(AttributeConst.EMPLOYEE, ev); //取得した従業員情報をリクエストスコープに保存
+            //取得した従業員情報をリクエストスコープに保存
+            putRequestScope(AttributeConst.EMPLOYEE, ev);
 
             //詳細画面show.jspにフォワード
             forward(ForwardConst.FW_EMP_SHOW);
@@ -198,7 +193,7 @@ public class EmployeeAction extends ActionBase {
 
                 //データが取得できなかった、または論理削除されている場合はエラー画面を表示
                 forward(ForwardConst.FW_ERR_UNKNOWN);
-                return;   //このreturn；は何を返すのか？
+                return;
             }
 
             //CSRF対策用トークン
@@ -225,7 +220,7 @@ public class EmployeeAction extends ActionBase {
             //パラメータの値を元に従業員情報のインスタンスを作成する
 
             EmployeeView ev = new EmployeeView(
-                    toNumber(getRequestParam(AttributeConst.EMP_ID)), //edit.jspではAttributeConst.EMP_ID.getValue()なのに、getValue()の違いは？
+                    toNumber(getRequestParam(AttributeConst.EMP_ID)),
                     getRequestParam(AttributeConst.EMP_CODE),
                     getRequestParam(AttributeConst.EMP_NAME),
                     getRequestParam(AttributeConst.EMP_PASS),
@@ -301,7 +296,6 @@ public class EmployeeAction extends ActionBase {
 
         //管理者でなければエラー画面を表示
         if(ev.getAdminFlag() != AttributeConst.ROLE_ADMIN.getIntegerValue()){
-         //ev.getAdminFlag().equals(AttributeConst.ROLE_ADMIN.getIntegerValue())でもOK?
 
          forward(ForwardConst.FW_ERR_UNKNOWN);
          return false;
@@ -312,35 +306,34 @@ public class EmployeeAction extends ActionBase {
      }
     }
 
-
+    /**
+     * 在籍社員の一覧を取得して表示する
+     * @throws ServletException
+     * @throws IOException
+     */
     public void all() throws ServletException, IOException {
 
+        //指定されたページ数の一覧画面に表示するデータを取得
+        int page = getPage();
+        List<EmployeeView> employees = service.getPerPage(page, false);
 
+        //全ての従業員データの件数を取得
+        long employeeCount = service.countAll(false);
 
-            //指定されたページ数の一覧画面に表示するデータを取得
-            int page = getPage();
-            List<EmployeeView> employees = service.getPerPage(page, false);
+        //リクエストスコープにそれぞれパラメータを保存
+        putRequestScope(AttributeConst.EMPLOYEES, employees);//取得した従業員データ
+        putRequestScope(AttributeConst.EMP_COUNT, employeeCount);//全ての従業員データの件数
+        putRequestScope(AttributeConst.PAGE, page); //ページ数
+        putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE);//1ページに表示するレコードの数
 
-            //全ての従業員データの件数を取得
-            long employeeCount = service.countAll(false);
+        String flush = getSessionScope(AttributeConst.FLUSH);
 
-            //リクエストスコープにそれぞれパラメータを保存
-            putRequestScope(AttributeConst.EMPLOYEES, employees);//取得した従業員データ
-            putRequestScope(AttributeConst.EMP_COUNT, employeeCount);//全ての従業員データの件数
-            putRequestScope(AttributeConst.PAGE, page); //ページ数
-            putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE);//1ページに表示するレコードの数
-
-
-            //いつflush文をセッションスコープに保存しているのか？
-            String flush = getSessionScope(AttributeConst.FLUSH);
-
-            if (flush != null) {
-                putRequestScope(AttributeConst.FLUSH, flush); //文字列flushがあったらリクエストスコープに保存
-                removeSessionScope(AttributeConst.FLUSH); //セッションスコープからは削除する
-            }
-
-            //一覧画面を表示
-            forward(ForwardConst.FW_EMP_ALL);
+        if (flush != null) {
+            putRequestScope(AttributeConst.FLUSH, flush); //文字列flushがあったらリクエストスコープに保存
+            removeSessionScope(AttributeConst.FLUSH); //セッションスコープからは削除する
         }
 
+        //一覧画面を表示
+        forward(ForwardConst.FW_EMP_ALL);
+    }
 }

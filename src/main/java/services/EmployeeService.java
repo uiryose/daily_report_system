@@ -231,6 +231,7 @@ public class EmployeeService extends ServiceBase {
         update(savedEmp);
     }
 
+
     /**
      * 社員番号とパスワードを条件に検索し、データが取得できるかどうかで認証結果を返却する
      * @param code 社員番号
@@ -281,18 +282,15 @@ public class EmployeeService extends ServiceBase {
         em.getTransaction().commit();
     }
 
+
     /**
      * 従業員データを更新する
      * @param ev 画面から入力された従業員の登録内容
      */
-
     private void update(EmployeeView ev) {
         em.getTransaction().begin();
         Employee e = findOneInternal(ev.getId());
         EmployeeConverter.copyViewToModel(e, ev);
         em.getTransaction().commit();
-
     }
-
-
 }

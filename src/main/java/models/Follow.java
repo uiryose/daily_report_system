@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -24,9 +25,9 @@ import lombok.Setter;
  */
 @Table(name = JpaConst.TABLE_FOL)
 @NamedQueries({
-    @NamedQuery( //フォローしているidの降順に取得する
-            name = JpaConst.Q_FOL_GET_ALL,
-            query = JpaConst.Q_FOL_GET_ALL_DEF)
+    @NamedQuery(
+            name = JpaConst.Q_FOL_GET_ONE,
+            query = JpaConst.Q_FOL_GET_ONE_DEF)
 })
 
 @Getter //全てのクラスフィールドについてgetterを自動生成する(Lombok)
@@ -47,16 +48,16 @@ public class Follow {
     /**
      * フォロー元の従業員id
      */
-//    @ManyToOne
-
+    @ManyToOne
     @JoinColumn(name = JpaConst.FOL_COL_MY_ID, nullable = true)
-    private Integer myId;
+    private Employee myEmployee;
 
     /**
      * フォロー先の従業員id
      */
-    @Column(name = JpaConst.FOL_COL_FOL_ID, nullable = true)
-    private Integer followId;
+    @ManyToOne
+    @JoinColumn(name = JpaConst.FOL_COL_FOL_ID, nullable = true)
+    private Employee followEmployee;
 
     /**
      * 登録日時

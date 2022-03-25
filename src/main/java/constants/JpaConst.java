@@ -110,14 +110,14 @@ public interface JpaConst {
     String Q_EMP_COUNT_REM_DEL = ENTITY_EMP + ".countRemDel";
     String Q_EMP_COUNT_DEF_REM_DEL = "SELECT COUNT(e) FROM Employee AS e WHERE " +  JPQL_PARM_DELET_FLG + "="+ EMP_DEL_FALSE ;
 
-    //自分のidを元にフォローしている従業員idを取得する
-    String Q_FOL_GET_ALL = ENTITY_FOL + ".getFollow";
-    String Q_FOL_GET_ALL_DEF = "SELECT f FROM Follow AS f WHERE my_id = " +  JPQL_PARM_ID +" ORDER BY f.id DESC";
+    //自分のidとフォロー先のidが一致するレコードを取得する
+    String Q_FOL_GET_ONE = ENTITY_FOL + ".getOne";
+    String Q_FOL_GET_ONE_DEF = "SELECT f FROM Follow AS f WHERE my_id = " +  JPQL_PARM_ID +" ORDER BY f.id DESC";
 
-    //自分のidとフォロー先のidがをテーブルに保存する
 
-    //自分のidとフォロー先のidが一致するレコードを削除する
-
+    //指定した従業員のフォロー先を全件idの降順で取得する
+    String Q_FOL_GET_ALL_MINE = ENTITY_FOL + ".getAllMine";
+    String Q_FOL_GET_ALL_MINE_DEF = "SELECT f FROM Follows AS f WHERE f.follow = :" + JPQL_PARM_FOLLOW + " ORDER BY f.id DESC";
 
 
 }

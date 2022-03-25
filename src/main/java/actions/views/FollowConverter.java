@@ -20,8 +20,8 @@ public class FollowConverter {
 
         return new Follow(
                 fv.getId(),
-                fv.getMyId(),
-                fv.getFollowId(),
+                EmployeeConverter.toModel(fv.getMyEmployee()),
+                EmployeeConverter.toModel(fv.getFollowEmployee()),
                 fv.getCreatedAt());
     }
 
@@ -38,13 +38,13 @@ public class FollowConverter {
 
         return new FollowView(
                 f.getId(),
-                f.getMyId(),
-                f.getFollowId(),
+                EmployeeConverter.toView(f.getMyEmployee()),
+                EmployeeConverter.toView(f.getFollowEmployee()),
                 f.getCreatedAt());
     }
 
     /**
-     * DTOモデルのリストからViewモデルのリストを作成する。　必要？？
+     * DTOモデルのリストからViewモデルのリストを作成する。
      * @param list DTOモデルのリスト
      * @return Viewモデルのリスト
      */
@@ -66,8 +66,8 @@ public class FollowConverter {
      */
     public static void copyViewToModel(Follow f, FollowView fv) {
         f.setId(fv.getId());
-        f.setMyId(fv.getMyId());
-        f.setFollowId(fv.getFollowId());
+        f.setMyEmployee(EmployeeConverter.toModel(fv.getMyEmployee()));
+        f.setFollowEmployee(EmployeeConverter.toModel(fv.getFollowEmployee()));
         f.setCreatedAt(fv.getCreatedAt());
     }
 

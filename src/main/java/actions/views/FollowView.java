@@ -26,12 +26,12 @@ public class FollowView {
     /**
      * 自分のid
      */
-    private Integer myId;
+    private EmployeeView myEmployee;
 
     /**
      * フォロー先のid
      */
-    private Integer followId;
+    private EmployeeView followEmployee;
 
     /**
      *登録日時

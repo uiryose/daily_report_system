@@ -8,6 +8,8 @@
 <c:set var="commNew" value="${ForwardConst.CMD_NEW.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commAll" value="${ForwardConst.CMD_ALL.getValue()}" />
+<c:set var="actFol" value="${ForwardConst.ACT_FOL.getValue()}" />
+<c:set var="commFol" value="${ForwardConst.CMD_FOLLOW.getValue()}" />
 
 <c:import url="../layout/app.jsp">
     <c:param name="content">
@@ -36,14 +38,17 @@
                             <c:otherwise>社員</c:otherwise>
                         </c:choose>
                        </td>
-                       <td><a href="'>">フォローする</a></td>
+                       <td class="follow_action"><a href="<c:url value='?action=${actFol}&command=${commFol}&id=${employee.id}' />">フォローする</a>
+                       <a href="">フォローを外す</a>
+                       </td>
+
                    </tr>
                 </c:forEach>
             </tbody>
         </table>
 
 
-        <div id="pagination">
+         <div id="pagination">
             (全 ${employees_count} 件)<br/>
             <c:forEach var="i" begin="1" end="${((employees_count - 1) / maxRow) +1 }" step="1">
                 <c:choose>
