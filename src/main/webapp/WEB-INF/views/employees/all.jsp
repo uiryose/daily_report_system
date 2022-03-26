@@ -10,6 +10,7 @@
 <c:set var="commAll" value="${ForwardConst.CMD_ALL.getValue()}" />
 <c:set var="actFol" value="${ForwardConst.ACT_FOL.getValue()}" />
 <c:set var="commFol" value="${ForwardConst.CMD_FOLLOW.getValue()}" />
+<c:set var="commRem" value="${ForwardConst.CMD_FOLLOW_REMOVE.getValue()}" />
 
 <c:import url="../layout/app.jsp">
     <c:param name="content">
@@ -39,7 +40,7 @@
                         </c:choose>
                        </td>
                        <td class="follow_action"><a href="<c:url value='?action=${actFol}&command=${commFol}&id=${employee.id}' />">フォローする</a>
-                       <a href="">フォローを外す</a>
+                                                 <a href="<c:url value='?action=${actFol}&command=${commRem}&id=${employee.id}' />">フォロー外す</a>
                        </td>
 
                    </tr>

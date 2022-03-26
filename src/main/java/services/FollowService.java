@@ -59,16 +59,27 @@ public class FollowService extends ServiceBase {
 
 
     /**
-     * フォローデータを削除する
-     * @param rv 日報データ
+     * フォローデータを削除する   (コンバーター入れてるがなぜか失敗する)
+     * @param fv フォローデータ
      */
     public void remove(FollowView fv) {
         //フォローテーブルから引数のレコードを削除する
 
         em.getTransaction().begin();
-        em.remove(fv);              //データ削除
+        em.remove(FollowConverter.toModel(fv));  //データ削除
         em.getTransaction().commit();
 
+    }
+    /**
+     * フォローデータを削除する
+     * @param f フォローデータ
+     */
+    public void removeDTO(Follow f) {
+        //フォローテーブルから引数のレコードを削除する
+
+        em.getTransaction().begin();
+        em.remove(f);  //データ削除
+        em.getTransaction().commit();
     }
 
 
@@ -91,8 +102,21 @@ public class FollowService extends ServiceBase {
         }
 
         return FollowConverter.toView(f);
+    }
 
+    public Follow getOneDTO(int myId, int followId) {
+        Follow f = null;
 
+        try {
+            f = em.createNamedQuery(JpaConst.Q_FOL_GET_ONE,Follow.class)
+                    .setParameter(JpaConst.JPQL_PARM_ID, myId)
+                    .setParameter(JpaConst.JPQL_PARM_ID_FOL, followId)
+                    .getSingleResult();
+
+        } catch (NoResultException e) {
+        }
+
+        return f;
     }
 
 //    /** 作り直し？？？
