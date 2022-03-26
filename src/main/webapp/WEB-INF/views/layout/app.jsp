@@ -36,8 +36,8 @@
        <!-- 共通で[日報管理]を表示。action="Report" command="index" -->
                     <a href="<c:url value='?action=${actRep}&command=${commIdx}' />">日報管理</a>&nbsp;
 
+                    <a href="<c:url value='?action=${actEmp}&command=${commAll}' />">在籍社員</a>&nbsp;
                 </c:if>
-           <a href="<c:url value='?action=${actEmp}&command=${commAll}' />">在籍社員</a>&nbsp;
 
             </div>
     <!-- ログイン(セッションスコープにlogin_employeeの情報がある)していれば、ヘッダーの右上に名前とログアウトボタンを設置 -->

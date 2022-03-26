@@ -53,11 +53,16 @@ public class FollowAction extends ActionBase {
 //    }
 //
 
-
+    /**
+     * 従業員をフォローする
+     * @throws ServletException
+     * @throws IOException
+     */
     public void follow() throws ServletException,IOException{
 
         //セッションからログイン中の従業員情報を取得
         EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+        int myId = ev.getId();
 
         //パラメータからフォローする従業員情報を取得する①
         int followId = toNumber(request.getParameter(AttributeConst.EMP_ID.getValue()));
@@ -65,15 +70,24 @@ public class FollowAction extends ActionBase {
         //①のID=フォローするIDから、フォロー先の従業員インスタンス作成
         EmployeeView evFollow = employeeService.findOne(followId);
 
-        //
+
         FollowView fv = new FollowView(
                 null,
                 ev,
                 evFollow,
                 null);
 
-        //FollowインスタンスfをDBに登録する
-        service.create(fv);
+        //DBからそれぞれの従業員IDが一致するレコードを取得する
+        FollowView fvc = service.getOne(myId, followId);
+
+        if(fvc==null) {
+
+            //新規のフォロー情報をDBに登録する
+            service.create(fv);
+        }else {
+            System.out.println("テスト：一致するデータがあります");
+
+        }
 
         //在籍社員一覧を表示してフォロー状態を反映させる
         redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_ALL);

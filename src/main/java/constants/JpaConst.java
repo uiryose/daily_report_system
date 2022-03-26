@@ -63,7 +63,8 @@ public interface JpaConst {
 
     //JPQL内パラメータ
 
-    String JPQL_PARM_ID = "id"; //社員番号
+    String JPQL_PARM_ID = "id"; //id
+    String JPQL_PARM_ID_FOL = "follow_id"; //フォロー先の従業員ID
     String JPQL_PARM_CODE = "code"; //社員番号
     String JPQL_PARM_PASSWORD = "password"; //パスワード
     String JPQL_PARM_EMPLOYEE = "employee"; //従業員
@@ -112,7 +113,7 @@ public interface JpaConst {
 
     //自分のidとフォロー先のidが一致するレコードを取得する
     String Q_FOL_GET_ONE = ENTITY_FOL + ".getOne";
-    String Q_FOL_GET_ONE_DEF = "SELECT f FROM Follow AS f WHERE my_id = " +  JPQL_PARM_ID +" ORDER BY f.id DESC";
+    String Q_FOL_GET_ONE_DEF = "SELECT f FROM Follow AS f WHERE f.myEmployee.id = :" +  JPQL_PARM_ID +" AND f.followEmployee.id = :" + JPQL_PARM_ID_FOL;
 
 
     //指定した従業員のフォロー先を全件idの降順で取得する

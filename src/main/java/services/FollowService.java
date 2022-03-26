@@ -1,7 +1,8 @@
 package services;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
+import javax.persistence.NoResultException;
 
 import actions.views.FollowConverter;
 import actions.views.FollowView;
@@ -72,14 +73,37 @@ public class FollowService extends ServiceBase {
 
 
     /**
-     * 一覧画面に表示するフォローデータを取得し、FollowViweのリストで返却する
-     * @return 一覧画面に表示するデータのリスト
+     * 検索したIDでフォローしていればインスタンスを返却
+     * @param myId
+     * @param followId
+     * @return
      */
-    public List<FollowView> getAll() {
+    public FollowView getOne(int myId, int followId) {
+        Follow f = null;
 
-        List<Follow> follows = em.createNamedQuery(JpaConst.Q_FOL_GET_ALL_MINE, Follow.class)
-                .getResultList();
-        return FollowConverter.toViewList(follows);
+        try {
+            f = em.createNamedQuery(JpaConst.Q_FOL_GET_ONE,Follow.class)
+                    .setParameter(JpaConst.JPQL_PARM_ID, myId)
+                    .setParameter(JpaConst.JPQL_PARM_ID_FOL, followId)
+                    .getSingleResult();
+
+        } catch (NoResultException e) {
+        }
+
+        return FollowConverter.toView(f);
+
+
     }
+
+//    /** 作り直し？？？
+//     * 一覧画面に表示するフォローデータを取得し、FollowViweのリストで返却する
+//     * @return 一覧画面に表示するデータのリスト
+//     */
+//    public List<FollowView> getAll() {
+//
+//        List<Follow> follows = em.createNamedQuery(JpaConst.Q_FOL_GET_ALL_MINE, Follow.class)
+//                .getResultList();
+//        return FollowConverter.toViewList(follows);
+//    }
 
 }
