@@ -81,7 +81,7 @@ public class ReportService extends ServiceBase {
      * @return 取得データのインスタンス
      */
     public ReportView findOne(int id) {
-                                    //findOneInternalは下で別途定義。idを条件にDBからレポートを1件取得する
+    //findOneInternalは下で別途定義。idを条件にDBからレポートを1件取得する
         return ReportConverter.toView(findOneInternal(id));
     }
 
@@ -149,12 +149,9 @@ public class ReportService extends ServiceBase {
      * @param rv 日報データ
      */
     private void updateInternal(ReportView rv) {
-        em.getTransaction().begin();              //DB接続開始
+        em.getTransaction().begin();
         Report r = findOneInternal(rv.getId());   //画面のレポート情報rvのidを元に、DBから検索してrに格納
-
-//【質問】画面の情報rvを、rに上書きしていく。id,employee,createAtは変更無いが毎回上書きする無駄な処理が発生。仕方ない？
         ReportConverter.copyViewToModel(r, rv);
-
-        em.getTransaction().commit();             //
+        em.getTransaction().commit();
     }
 }

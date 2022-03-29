@@ -6,7 +6,8 @@
 <c:set var="actTop" value="${ForwardConst.ACT_TOP.getValue()}" />
 <c:set var="actEmp" value="${ForwardConst.ACT_EMP.getValue()}" />     <!-- Employee -->
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />     <!-- Report -->
-<c:set var="actAuth" value="${ForwardConst.ACT_AUTH.getValue()}" />   <!-- Auth 認証の意味-->
+<c:set var="actAuth" value="${ForwardConst.ACT_AUTH.getValue()}" />   <!-- Auth -->
+<c:set var="actFol" value="${ForwardConst.ACT_FOL.getValue()}" />   <!-- Follow -->
 
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commOut" value="${ForwardConst.CMD_LOGOUT.getValue()}" />
@@ -37,6 +38,8 @@
                     <a href="<c:url value='?action=${actRep}&command=${commIdx}' />">日報管理</a>&nbsp;
 
                     <a href="<c:url value='?action=${actEmp}&command=${commAll}' />">在籍社員</a>&nbsp;
+
+                    <a href="<c:url value='?action=${actFol}&command=${commIdx}' />">お気に入り</a>&nbsp;
                 </c:if>
 
             </div>
@@ -45,7 +48,6 @@
                 <div id="employee_name">
                     <c:out value="${sessionScope.login_employee.name}" />&nbsp;さん&nbsp;&nbsp;&nbsp;
                     <a href="<c:url value='?action=${actAuth}&command=${commOut}' />">ログアウト</a>
-
                 </div>
             </c:if>
         </div>

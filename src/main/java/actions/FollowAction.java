@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 
 import actions.views.EmployeeView;
+import actions.views.FollowConverter;
 import actions.views.FollowView;
 import constants.AttributeConst;
 import constants.ForwardConst;
@@ -79,7 +80,7 @@ public class FollowAction extends ActionBase {
                 null);
 
         //DBからそれぞれの従業員IDが一致するレコードを取得する
-        FollowView fvc = service.getOne(myId, followId);
+        FollowView fvc = FollowConverter.toView(service.getOne(myId, followId));
 
         if(fvc==null) {
 
@@ -109,19 +110,24 @@ public class FollowAction extends ActionBase {
         //パラメータからフォローを外す従業員のidを取得する
         int followId = toNumber(request.getParameter(AttributeConst.EMP_ID.getValue()));
 
-        FollowView fv = service.getOne(myId, followId);
-        Follow f = service.getOneDTO(myId, followId);
+        Follow f = service.getOne(myId, followId);
 
-        if(fv != null) {
+        if(f != null) {
             //DBからフォロー情報を１行削除する
-            service.removeDTO(f);
-            System.out.println("分岐に入りました。");
+            service.remove(f);
         }
 
         //在籍社員一覧を表示してフォロー状態を反映させる
         redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_ALL);
     }
 
+
+    //フォローしている従業員を表示する
+    public void index() throws ServletException, IOException{
+
+
+
+    }
 
 
 }
