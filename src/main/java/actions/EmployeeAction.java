@@ -6,12 +6,14 @@ import java.util.List;
 import javax.servlet.ServletException;
 
 import actions.views.EmployeeView;
+import actions.views.FollowView;
 import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
 import constants.MessageConst;
 import constants.PropertyConst;
 import services.EmployeeService;
+import services.FollowService;
 
 /**
  * 従業員に関わる処理を行うActionクラス
@@ -20,6 +22,7 @@ import services.EmployeeService;
 public class EmployeeAction extends ActionBase {
 
     private EmployeeService service;
+    private FollowService followService;
 
     /**
      * メソッドを実行する
@@ -28,11 +31,13 @@ public class EmployeeAction extends ActionBase {
     public void process() throws ServletException, IOException {
 
         service = new EmployeeService();
+        followService = new FollowService();
 
         //メソッドを実行。パラメータからcommandを取得し、それを実行する。不正なコマンドならエラー画面にフォワード
         invoke();
 
         service.close();
+        followService.close();
 
     }
 
@@ -291,8 +296,6 @@ public class EmployeeAction extends ActionBase {
 
         //セッションからログイン中の従業員情報を取得
         EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
-        //"login_employee"のセッションスコープを取得。キャスト変換しなくてもev型になっているのでは？セッション内でどういう状態？
-
 
         //管理者でなければエラー画面を表示
         if(ev.getAdminFlag() != AttributeConst.ROLE_ADMIN.getIntegerValue()){
@@ -332,6 +335,15 @@ public class EmployeeAction extends ActionBase {
             putRequestScope(AttributeConst.FLUSH, flush); //文字列flushがあったらリクエストスコープに保存
             removeSessionScope(AttributeConst.FLUSH); //セッションスコープからは削除する
         }
+
+        //セッションからログイン中の従業員情報を取得
+        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+
+        //フォロー状態を反映するために、フォロー一覧のリストを作成する
+        List<FollowView> follows = followService.getAllMine(ev);
+
+      //取得したフォローデータをリクエストスコープに保存んする
+        putRequestScope(AttributeConst.FOLLOWS, follows);
 
         //一覧画面を表示
         forward(ForwardConst.FW_EMP_ALL);

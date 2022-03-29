@@ -40,7 +40,7 @@ public class LoginFilter implements Filter {
      */
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        String contextPath = ((HttpServletRequest) request).getContextPath();   //どういう構文・・・？
+        String contextPath = ((HttpServletRequest) request).getContextPath();
         String servletPath = ((HttpServletRequest) request).getServletPath();
 
         if (servletPath.matches("/css.*")) {
@@ -56,29 +56,21 @@ public class LoginFilter implements Filter {
 
             //セッションからログインしている従業員の情報を取得
             EmployeeView ev = (EmployeeView) session.getAttribute(AttributeConst.LOGIN_EMP.getValue()); //"login_employee"のセッションスコープ
-                //フィルターでEmployeeView evを作って、様々なところで競合？する可能性はないのか？
 
             if (ev == null) {
                 //未ログイン
 
-                    //URLが認証Authでもなくログイン画面でもない、または、？？の時・・・どういうif文？
                 if (!(ForwardConst.ACT_AUTH.getValue().equals(action)               //文字列"Auth"とクエリで取得したactionの内容と一致するか
                         && (ForwardConst.CMD_SHOW_LOGIN.getValue().equals(command)  //文字列"showLogin"とクエリで取得したcommandの内容と一致するか
                                 || ForwardConst.CMD_LOGIN.getValue().equals(command)))) { //文字列"login"とクエリで取得したcommandの内容と一致するか
 
 
-                    //ログインページの表示またはログイン実行以外はログインページにリダイレクト？
                     ((HttpServletResponse) response).sendRedirect(
-                            contextPath                                          //contextPathは上で定義しているが、ここからわからない。
-                                    + "?action=" + ForwardConst.ACT_AUTH.getValue()            //action=Auth&command=showLoginのリンクにリダイレクトする
+                            contextPath
+                                    + "?action=" + ForwardConst.ACT_AUTH.getValue()
                                     + "&command=" + ForwardConst.CMD_SHOW_LOGIN.getValue());
-                    /*
-                    　今までのリダイレクトの構文はこんな感じ。request.getContextPath() + "/index"で何が起きている？
-                    　protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-                    　response.sendRedirect(request.getContextPath() + "/index");  }
-                    */
 
-                    return;     //なにをreturnする？
+                    return;
                 }
             } else {
                 //ログイン済・・・実行できる認証系の機能はログアウトだけ
@@ -92,7 +84,7 @@ public class LoginFilter implements Filter {
                                 contextPath
                                         + "?action=" + ForwardConst.ACT_TOP.getValue()
                                         + "&command=" + ForwardConst.CMD_INDEX.getValue());
-                        return;   //なにをreturnする？
+                        return;
 
                     } else if (ForwardConst.CMD_LOGOUT.getValue().equals(command)) {
                         //ログアウトの実施は許可

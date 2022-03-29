@@ -23,8 +23,7 @@ public interface JpaConst {
     String EMP_COL_CREATED_AT = "created_at"; //登録日時
     String EMP_COL_UPDATED_AT = "updated_at"; //更新日時
     String EMP_COL_DELETE_FLAG = "delete_flag"; //削除フラグ
-
-    String EMP_COL_POSITION_FLAG = "position_flag";
+    String EMP_COL_POSITION_FLAG = "position_flag";//役職
 
     int ROLE_ADMIN = 1; //管理者権限ON(管理者)
     int ROLE_GENERAL = 0; //管理者権限OFF(一般)
@@ -55,11 +54,26 @@ public interface JpaConst {
     String FOL_COL_FOL_ID = "follow_id"; //フォロー先の従業員のid
     String FOL_COL_CREATED_AT = "created_at"; //登録日時
 
+    //コメントテーブル
+    String TABLE_COM = "comments"; //テーブル名
+    //コメントテーブルカラム
+    String COM_COL_ID = "id"; //id
+    String COM_COL_REP = "rep_id"; //日報を作成した従業員のid
+    String COM_COL_EMP = "emp_id"; //日報を作成した従業員のid
+    String COM_COL_CONTENT = "content"; //日報の内容
+    String COM_COL_CREATED_AT = "created_at"; //登録日時
+    String COM_COL_UPDATED_AT = "updated_at"; //更新日時
+    String COM_COL_EDIT_FLAG = "edit_flag"; //編集フラグ
+    String COM_COL_DELETE_FLAG = "delete_flag"; //削除フラグ
+
+    int COM_DEL_TRUE = 1; //削除フラグON(削除済み)
+    int COM_DEL_FALSE = 0; //削除フラグOFF(現役)
+
     //Entity名
     String ENTITY_EMP = "employee"; //従業員
     String ENTITY_REP = "report"; //日報
-
     String ENTITY_FOL = "follow"; //フォロー
+    String ENTITY_COM = "comment"; //コメント
 
     //JPQL内パラメータ
 
@@ -115,10 +129,11 @@ public interface JpaConst {
     String Q_FOL_GET_ONE = ENTITY_FOL + ".getOne";
     String Q_FOL_GET_ONE_DEF = "SELECT f FROM Follow AS f WHERE f.myEmployee.id = :" +  JPQL_PARM_ID +" AND f.followEmployee.id = :" + JPQL_PARM_ID_FOL;
 
-
     //指定した従業員のフォロー先を全件idの降順で取得する
     String Q_FOL_GET_ALL_MINE = ENTITY_FOL + ".getAllMine";
-    String Q_FOL_GET_ALL_MINE_DEF = "SELECT f FROM Follows AS f WHERE f.follow = :" + JPQL_PARM_FOLLOW + " ORDER BY f.id DESC";
+    String Q_FOL_GET_ALL_MINE_DEF = "SELECT f FROM Follow AS f WHERE f.myEmployee = :" + JPQL_PARM_EMPLOYEE + " ORDER BY f.id DESC";
 
-
+    //指定したレポートのidでコメント情報を取得する
+    String Q_COM_GET_ALL_MINE = ENTITY_COM + "getAllMine";
+    String Q_COM_GET_ALL_MINE_DEF = "SELECT c FROM Commnet AS c WHERE c.appReport.id = :" + JPQL_PARM_ID + " ORDER BY c.id DESC"  ;
 }

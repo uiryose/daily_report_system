@@ -45,7 +45,7 @@ public enum AttributeConst {
     POSITION_LOW(0), //社員
 
     //削除フラグ
-    DEL_FLAG_TRUE(1),  //削除済み？
+    DEL_FLAG_TRUE(1),  //削除済み
     DEL_FLAG_FALSE(0),
 
     //日報管理
@@ -61,8 +61,14 @@ public enum AttributeConst {
     FOLLOW("follow"),
     FOLLOWS("follows"),
     FOL_MY_ID("my_id"),
-    FOL_FOLLOW_ID("follow_id");
+    FOL_FOLLOW_ID("follow_id"),
 
+    //コメント
+    COMMENT("comment"),
+    COMMENTS("comments"),
+    COM_REP_ID("rep_id"),
+    COM_EMP_ID("emp_id"),
+    COM_CONTENT("content");
 
 
     private final String text;
