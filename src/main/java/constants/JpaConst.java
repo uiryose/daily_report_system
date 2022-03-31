@@ -135,5 +135,5 @@ public interface JpaConst {
 
     //指定したレポートのidでコメント情報を取得する
     String Q_COM_GET_ALL_MINE = ENTITY_COM + "getAllMine";
-    String Q_COM_GET_ALL_MINE_DEF = "SELECT c FROM Comment AS c WHERE c.appReport.id = :" + JPQL_PARM_ID + " ORDER BY c.id DESC"  ;
+    String Q_COM_GET_ALL_MINE_DEF = "SELECT c FROM Comment AS c WHERE c.report.id = :" + JPQL_PARM_ID;
 }

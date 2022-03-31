@@ -49,14 +49,14 @@ public class Comment {
     private Integer id;
 
     /**
-     * 日報を登録した従業員
+     * コメントした日報
      */
     @ManyToOne
     @JoinColumn(name = JpaConst.COM_COL_REP, nullable = false)
     private Report report;
 
     /**
-     * 日報を登録した従業員
+     * コメントした従業員
      */
     @ManyToOne
     @JoinColumn(name = JpaConst.COM_COL_EMP, nullable = false)

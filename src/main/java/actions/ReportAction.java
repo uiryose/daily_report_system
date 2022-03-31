@@ -6,17 +6,21 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 
+import actions.views.CommentView;
 import actions.views.EmployeeView;
 import actions.views.ReportView;
 import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
 import constants.MessageConst;
+import services.CommentService;
 import services.ReportService;
 
 public class ReportAction extends ActionBase{
 
     private ReportService service;
+    private CommentService commentService;
+
     /**
      * メソッドを実行する
      */
@@ -24,10 +28,12 @@ public class ReportAction extends ActionBase{
     public void process() throws ServletException, IOException {
 
         service = new ReportService();
+        commentService = new CommentService();
 
         //メソッドの追加
         invoke();
         service.close();
+        commentService.close();
 
     }
 
@@ -151,14 +157,30 @@ public class ReportAction extends ActionBase{
         //idを条件に日報データをDBから取得する
         ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
 
+        //リクエストパラメータの日報idを取得する
+        int rep_id = toNumber(getRequestParam(AttributeConst.REP_ID));
+
+        //日報idを元に、該当するコメントデータを取得する
+        List<CommentView> comments = commentService.getAllMine(rep_id);
+
+        String errors = getRequestParam(AttributeConst.ERR);
+
         if(rv==null) {
             //該当するデータがなければエラー画面を表示
             forward(ForwardConst.FW_ERR_UNKNOWN);
+
         } else {
 
             //リクエストスコープの"report"にDBのレポート情報(idひとつ分)を保存する。
             //show.jspではリクエストスコープから情報を読み込む
             putRequestScope(AttributeConst.REPORT, rv);
+
+        }
+
+        if(comments.size() > 0) {
+            //リクエストスコープにコメント情報を保存する
+            putRequestScope(AttributeConst.COMMENTS, comments);
+
         }
         //詳細画面を表示
         forward(ForwardConst.FW_REP_SHOW);

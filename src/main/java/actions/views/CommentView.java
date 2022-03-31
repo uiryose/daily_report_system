@@ -36,7 +36,7 @@ public class CommentView {
 
 
     /**
-     * 日報の内容
+     * コメントの内容
      */
     private String content;
 

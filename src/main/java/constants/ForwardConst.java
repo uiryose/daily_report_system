@@ -13,6 +13,7 @@ public enum ForwardConst {
     ACT_REP("Report"),
     ACT_AUTH("Auth"),
     ACT_FOL("Follow"),
+    ACT_COM("Comment"),
 
     //command
     CMD("command"),

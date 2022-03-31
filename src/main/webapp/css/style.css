@@ -144,3 +144,137 @@ pre {
 h3 {
     font-size: larger;
 }
+
+/*  ここからCSSトライ  */
+table.comment {
+    width: 750px;
+}
+td.left-name {
+    width: 120px;
+    padding: 10px 2%;
+}
+
+td.left-text {
+
+    padding: 10px 2%;
+      position: relative;
+  margin-right: 180px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #9cd6e7;
+  float: right;
+}
+
+
+
+.comment {
+  padding:0;
+  background: #a3dcc5;
+  overflow: hidden;
+  width: 800px;
+  margin: 50px;
+  }
+
+
+
+
+
+
+/*  猫のやつ  */
+/*--------------------
+ 吹き出しを作る
+--------------------*/
+.balloon-date-left{
+  bottom: 0;
+  margin: 0;
+  padding-top: 18px;
+}
+
+.balloon {
+margin-bottom: 3px;
+position: relative;
+background-color:#b3cccb;;
+}
+.balloon:before,.balloon:after {
+clear: both;
+content: "";
+display: block;
+}
+
+.balloon-image-left {
+float: left;
+width: 120px;
+margin-right: 10px;
+padding: 10px;
+}
+.balloon-image-right {
+float: right;
+margin-left: 20px;
+}
+
+.balloon-image-description {
+padding: 5px 0 0;
+font-size: 10px;
+text-align: center;
+}
+.balloon-text-right,.balloon-text-left {
+position: relative;
+padding: 10px;
+border: 1px solid;
+border-radius: 10px;
+max-width: -webkit-calc(100% - 120px);
+max-width: calc(100% - 120px);
+display: inline-block;
+}
+.balloon-text-right {
+border-color: #aaa;
+}
+.balloon-text-left {
+border-color: #aaa;
+}
+.balloon-text-right {
+float: left;
+}
+.balloon-text-left {
+float: right;
+}
+.balloon p {
+margin: 0 0 20px;
+}
+.balloon p:last-child {
+margin-bottom: 0;
+}
+/* 三角部分 */
+.balloon-text-right:before {
+position: absolute;
+content: '';
+border: 10px solid transparent;
+border-right: 10px solid #aaa;
+top: 15px;
+left: -20px;
+}
+.balloon-text-right:after {
+position: absolute;
+content: '';
+border: 10px solid transparent;
+border-right: 10px solid #fff;
+top: 15px;
+left: -19px;
+}
+.balloon-text-left:before {
+position: absolute;
+content: '';
+border: 10px solid transparent;
+border-left: 10px solid #aaa;
+top: 15px;
+right: -20px;
+}
+.balloon-text-left:after {
+position: absolute;
+content: '';
+border: 10px solid transparent;
+border-left: 10px solid #fff;
+top: 15px;
+right: -19px;
+}
+

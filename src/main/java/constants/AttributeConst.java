@@ -68,7 +68,7 @@ public enum AttributeConst {
     COMMENTS("comments"),
     COM_REP_ID("rep_id"),
     COM_EMP_ID("emp_id"),
-    COM_CONTENT("content");
+    COM_CONTENT("com_content");
 
 
     private final String text;

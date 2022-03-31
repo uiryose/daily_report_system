@@ -2,15 +2,23 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="constants.ForwardConst" %>
+<%@ page import="constants.AttributeConst" %>
 
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
+<c:set var="actCom" value="${ForwardConst.ACT_COM.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commEdt" value="${ForwardConst.CMD_EDIT.getValue()}" />
+<c:set var="commCre" value="${ForwardConst.CMD_CREATE.getValue()}" />
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
 
     <h2>日報 詳細ページ</h2>
+<c:if test="${errors != null}">
+    <div id="flush_error">
+        コメントが未入力です。<br>
+    </div>
+</c:if>
     <table>
         <tbody>
             <tr>
@@ -48,6 +56,74 @@
     <p>
         <a href="<c:url value='?action=${actRep}&command=${commIdx}'/>">一覧に戻る</a>
     </p>
+
+
+
+
+
+<div class="comment">
+<c:forEach var="comment" items="${comments}">
+<div class="balloon">
+ <div class="balloon-image-left">
+   <c:out value="${comment.employee.name}"/>
+ </div>
+ <div class="balloon-text-right">
+ <p class="kaiwa-text"><c:out value="${comment.content}"/></p>
+ </div>
+    <div class="balloon-date-left"><fmt:parseDate value="${comment.updatedAt}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="day" type="date" />
+   <fmt:formatDate value="${day}" pattern="(M/d)" />
+   <a href="<c:url value='?action=${actCom}&command=${commEdt}'/>">編集</a>
+   </div>
+
+</div>
+</c:forEach>
+</div>
+
+
+
+
+
+
+<!--  ここから繰り返し挑戦
+        <table class="comment">
+            <tbody>
+                <c:forEach var="comment" items="${comments}">
+                    <tr class="">
+                        <td class="left-name"><c:out value="${comment.employee.name}" /></td>
+                        <td class="left-text"><c:out value="${comment.content}" />
+                        <fmt:parseDate value="${comment.updatedAt}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="day" type="date" />
+                        <fmt:formatDate value="${day}" pattern="(M/d)" /></td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+
+-->
+
+
+
+
+
+
+
+
+
+        <form method="POST" action="<c:url value='?action=${actCom}&command=${commCre}&id=${report.id}'/>">
+
+            <label for="${AttributeConst.COM_CONTENT.getValue()}">COMMENT</label><br />
+            <textarea name="${AttributeConst.COM_CONTENT.getValue()}" rows="3" cols="60">${comment.content}</textarea>
+            <br /><br />
+
+<%--
+            <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
+            <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}" />
+           --%>
+
+            <button type="submit">送信</button>
+
+        </form>
+
+
 
     </c:param>
 </c:import>

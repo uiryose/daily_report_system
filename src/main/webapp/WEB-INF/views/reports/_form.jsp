@@ -29,14 +29,12 @@
 <c:out value="${sessionScope.login_employee.name}" />
 <br><br>
 
-<label for="${AttributeConst.REP_TITLE.getValue()}">タイトル</label>
-
+<label for="${AttributeConst.REP_TITLE.getValue()}">タイトル</label><br>
 <input type="text" name="${AttributeConst.REP_TITLE.getValue()}" value="${report.title}" />
 <br><br>
 
 <label for="${AttributeConst.REP_CONTENT.getValue()}">内容</label><br />
 <textarea name="${AttributeConst.REP_CONTENT.getValue()}" rows="10" cols="50">${report.content}</textarea>
-<!-- row:縦行　cols：横幅　ラベルと関連付けているが何が起きる？ -->
 <br /><br />
 
 <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />

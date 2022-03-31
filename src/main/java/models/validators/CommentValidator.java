@@ -23,6 +23,8 @@ public class CommentValidator {
         //エラーメッセージが返されていたら、リストにエラー文を追加する
         if (!contentError.equals("")) {
             errors.add(contentError);
+
+            System.out.println("バリデーションでエラーがあります");
         }
 
         //エラーの有無に関わらず、エラー文のリストを返す

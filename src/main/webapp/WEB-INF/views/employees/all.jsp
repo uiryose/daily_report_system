@@ -32,14 +32,15 @@
                 <c:forEach var="employee" items="${employees}" varStatus="status">
                     <tr class="row${status.count %2 }">
                         <td><c:out value="${employee.code}" /></td>
-                        <td><a href="<c:url value='?action=${actEmp}&command=${commShow}&id=${employee.id}' />" ><c:out value="${employee.name}" /><a></a></td>
+                        <td><a href="<c:url value='?action=${actEmp}&command=${commShow}&id=${employee.id}' />" ><c:out value="${employee.name}" /></a></td>
                         <td><c:choose>
                                 <c:when
                                     test="${employee.positionFlag == AttributeConst.POSITION_TOP.getIntegerValue()}">役員</c:when>
                                 <c:when
                                     test="${employee.positionFlag == AttributeConst.POSITION_MID.getIntegerValue()}">部長</c:when>
                                 <c:otherwise>社員</c:otherwise>
-                            </c:choose></td>
+                            </c:choose>
+                        </td>
 
                         <c:set var="Followed" scope="request" value="false" />
                         <td class="follow_action">
