@@ -7,6 +7,7 @@
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
 <c:set var="commUpd" value="${ForwardConst.CMD_UPDATE.getValue()}" />
 <c:set var="actCom" value="${ForwardConst.ACT_COM.getValue()}" />
+<c:set var="commDes" value="${ForwardConst.CMD_DESTROY.getValue()}" />
 
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
@@ -33,9 +34,8 @@
             <a href="#" onclick="confirmDestroy();">このコメントを削除する</a>
         </p>
 
-        <form method="POST"
-            action="<c:url value='?action=${action}&command=${commDel}'/>">
-            <input type="hidden" name="${AttributeConst.COM_ID.getValue()}" value="${comment.id}"/>
+        <form method="POST" action="<c:url value='?action=${actCom}&command=${commDes}&id=${comment.id}'/>">
+            <input type="hidden" name="${AttributeConst.COM_REP_ID.getValue()}" value="${comment.report.id}"/>
             <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}"/>
         </form>
 

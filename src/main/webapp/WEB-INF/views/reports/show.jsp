@@ -19,6 +19,11 @@
         コメントが未入力です。<br>
     </div>
 </c:if>
+   <c:if test="${flush != null}">
+       <div id="flush_success">
+           <c:out value="${flush}"></c:out>
+       </div>
+   </c:if>
     <table>
         <tbody>
             <tr>
@@ -66,18 +71,24 @@
                     </div>
                     <div class="balloon-text-right">
                         <p class="kaiwa-text">
-                            <c:out value="${comment.content}" />
+                        <c:choose>
+                            <c:when test="${comment.deleteFlag == AttributeConst.DEL_FLAG_TRUE.getIntegerValue()}">
+                               (このコメントは削除されました)
+                            </c:when>
+                            <c:otherwise> <c:out value="${comment.content}" /></c:otherwise>
+                        </c:choose>
                         </p>
                     </div>
                     <div class="balloon-date-left">
                         <fmt:parseDate value="${comment.updatedAt}"
                             pattern="yyyy-MM-dd'T'HH:mm:ss" var="day" type="date" />
                         <fmt:formatDate value="${day}" pattern="(M/d)" />
-                        <c:if
-                            test="${sessionScope.login_employee.id == comment.employee.id}">
-                            <a
-                                href="<c:url value='?action=${actCom}&command=${commEdt}&id=${comment.id}'/>">編集</a>
-                        </c:if>
+                        <c:choose>
+                            <c:when test="${comment.deleteFlag == AttributeConst.DEL_FLAG_TRUE.getIntegerValue()}"></c:when>
+                            <c:when test="${sessionScope.login_employee.id == comment.employee.id}">
+                            <a class="edit" href="<c:url value='?action=${actCom}&command=${commEdt}&id=${comment.id}'/>">編集</a>
+                            </c:when>
+                        </c:choose>
                     </div>
                 </div>
             </c:forEach>

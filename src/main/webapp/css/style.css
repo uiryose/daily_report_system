@@ -193,12 +193,16 @@ td.left-text {
 .balloon {
 margin-bottom: 3px;
 position: relative;
-background-color:rgb(0, 128, 255);;
+background-color:rgb(255, 255, 128);;
 }
 .balloon:before,.balloon:after {
 clear: both;
 content: "";
 display: block;
+}
+
+a.edit{
+     color: #400080;
 }
 
 .balloon-image-left {

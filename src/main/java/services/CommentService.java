@@ -81,6 +81,24 @@ public class CommentService extends ServiceBase {
 
 
     /**
+     * コメントデータを論理削除する
+     * @param id
+     */
+    public void destroy(Integer id) {
+
+        //idを条件に登録済みのコメント情報を取得する
+        CommentView savedCom = findOne(id);
+
+        //論理削除フラグをたてる。[1]を設定
+        savedCom.setDeleteFlag(JpaConst.EMP_DEL_TRUE);
+
+        //更新処理を行う
+        update(savedCom);
+
+    }
+
+
+    /**
      * コメントIDを条件にコメントデータを1件取得する
      * @param id
      * @return 取得データのインスタンス
@@ -112,5 +130,7 @@ public class CommentService extends ServiceBase {
         CommentConverter.copyViewToModel(c, cv);
         em.getTransaction().commit();
     }
+
+
 
 }

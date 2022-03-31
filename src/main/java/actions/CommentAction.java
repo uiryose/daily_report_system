@@ -134,6 +134,29 @@ public class CommentAction extends ActionBase {
     }
 
 
+    /**
+     * コメントの論理削除を行う
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void destroy() throws ServletException, IOException{
+
+      //CSRF対策 tokenのチェック
+        if(checkToken()) {
+
+            //コメントのidを条件に論理削除を行う
+            service.destroy(toNumber(getRequestParam(AttributeConst.COM_ID)));
+
+            //セッションに削除完了のフラッシュメッセージを設定
+//            putSessionScope(AttributeConst.FLUSH, MessageConst.I_DELETED.getMessage());
+
+            //コメントした日報詳細ページにリダイレクト
+            redirect(ForwardConst.ACT_REP, ForwardConst.CMD_SHOW, toNumber(getRequestParam(AttributeConst.COM_REP_ID)) );
+
+        }
+
+
+    }
 
 
 }
