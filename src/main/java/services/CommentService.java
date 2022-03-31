@@ -29,6 +29,15 @@ public class CommentService extends ServiceBase {
 
 
     /**
+     * idを条件に取得したデータをCommentViewのインスタンスで返却する
+     * @param id
+     * @return
+     */
+    public CommentView findOne(int id) {
+        return CommentConverter.toView(findOneInternal(id));
+    }
+
+    /**
      * 画面から入力されたコメント内容を元にデータを1件作成し、コメントテーブルに登録する
      * @param cv コメントの内容
      * @return バリデーションで発生したエラーのリスト

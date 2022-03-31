@@ -119,6 +119,20 @@ public abstract class ActionBase {
       //今までは→  response.sendRedirect(request.getContextPath()+"/index");
     }
 
+    protected void redirect(ForwardConst action, ForwardConst command, int id)throws ServletException, IOException{
+
+        //URLを構築             //daily_report_system/?action=、     actionは引数から
+        String redirectUrl = request.getContextPath()+"/?action="+action.getValue();
+        if (command != null) {                       //commandにはcommandそのものの文字列を取得している
+            redirectUrl = redirectUrl + "&command=" + command.getValue();
+        }
+        if (id > 0) {
+            redirectUrl = redirectUrl + "&id=" + id;
+        }
+        //URLへリダイレクト
+        response.sendRedirect(redirectUrl);
+    }
+
     /**
      * CSRF対策 token不正の場合はエラー画面を表示
      * @return true: token有効 false: token不正

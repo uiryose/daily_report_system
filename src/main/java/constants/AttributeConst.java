@@ -48,6 +48,10 @@ public enum AttributeConst {
     DEL_FLAG_TRUE(1),  //削除済み
     DEL_FLAG_FALSE(0),
 
+    //編集フラグ
+    DEL_EDIT_TRUE(1),  //編集済み
+    DEL_EDIT_FALSE(0),
+
     //日報管理
     REPORT("report"),
     REPORTS("reports"),
@@ -66,9 +70,10 @@ public enum AttributeConst {
     //コメント
     COMMENT("comment"),
     COMMENTS("comments"),
+    COM_ID("id"),
     COM_REP_ID("rep_id"),
     COM_EMP_ID("emp_id"),
-    COM_CONTENT("com_content");
+    COM_CONTENT("content");
 
 
     private final String text;

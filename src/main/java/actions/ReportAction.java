@@ -202,7 +202,6 @@ public class ReportAction extends ActionBase{
 
         //該当の日報データが存在しない、またはログインしている従業員が日報の作成者でない場合はエラー画面を表示
         if(rv == null || ev.getId() != rv.getEmployee().getId()) {
-                                            //getId()メソッドでなぜ違いが出る？
             forward(ForwardConst.FW_ERR_UNKNOWN);
 
         } else {
@@ -242,7 +241,6 @@ public class ReportAction extends ActionBase{
                 //更新中にエラーが発生した場合
                 //編集画面を再表示する。この画面にリクエストスコープに保存した更新できなかったデータを再表示
 
-                //tokenは結局なぜ？
                 putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
                 putRequestScope(AttributeConst.REPORT, rv); //入力された日報情報
                 putRequestScope(AttributeConst.ERR, errors); //エラーのリスト

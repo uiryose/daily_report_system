@@ -11,8 +11,8 @@ public class CommentValidator {
 
 
     /**
-     * 日報インスタンスの各項目についてバリデーションを行う
-     * @param rv 日報インスタンス
+     * コメント入力についてバリデーションを行う
+     * @param cv コメントのインスタンス
      * @return エラーのリスト
      */
     public static List<String> validate(CommentView cv){

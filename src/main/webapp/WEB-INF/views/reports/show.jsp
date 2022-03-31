@@ -49,7 +49,7 @@
 
 <!-- ログインIDとレポートのIDが一致していたら修正のリンクを表示する -->
     <c:if test="${sessionScope.login_employee.id==report.employee.id}">
-        <p>                                                       <!--   このreportはどこから繋がっているか   -->
+        <p>
             <a href="<c:url value='?action=${actRep}&command=${commEdt}&id=${report.id}'/>">この日報を修正する</a>
         </p>
     </c:if>
@@ -57,55 +57,31 @@
         <a href="<c:url value='?action=${actRep}&command=${commIdx}'/>">一覧に戻る</a>
     </p>
 
-
-
-
-
-<div class="comment">
-<c:forEach var="comment" items="${comments}">
-<div class="balloon">
- <div class="balloon-image-left">
-   <c:out value="${comment.employee.name}"/>
- </div>
- <div class="balloon-text-right">
- <p class="kaiwa-text"><c:out value="${comment.content}"/></p>
- </div>
-    <div class="balloon-date-left"><fmt:parseDate value="${comment.updatedAt}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="day" type="date" />
-   <fmt:formatDate value="${day}" pattern="(M/d)" />
-   <a href="<c:url value='?action=${actCom}&command=${commEdt}'/>">編集</a>
-   </div>
-
-</div>
-</c:forEach>
-</div>
-
-
-
-
-
-
-<!--  ここから繰り返し挑戦
-        <table class="comment">
-            <tbody>
-                <c:forEach var="comment" items="${comments}">
-                    <tr class="">
-                        <td class="left-name"><c:out value="${comment.employee.name}" /></td>
-                        <td class="left-text"><c:out value="${comment.content}" />
-                        <fmt:parseDate value="${comment.updatedAt}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="day" type="date" />
-                        <fmt:formatDate value="${day}" pattern="(M/d)" /></td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
-
--->
-
-
-
-
-
-
-
+<h3>日報へのコメント</h3>
+        <div class="comment">
+            <c:forEach var="comment" items="${comments}">
+                <div class="balloon">
+                    <div class="balloon-image-left">
+                        <c:out value="${comment.employee.name}" />
+                    </div>
+                    <div class="balloon-text-right">
+                        <p class="kaiwa-text">
+                            <c:out value="${comment.content}" />
+                        </p>
+                    </div>
+                    <div class="balloon-date-left">
+                        <fmt:parseDate value="${comment.updatedAt}"
+                            pattern="yyyy-MM-dd'T'HH:mm:ss" var="day" type="date" />
+                        <fmt:formatDate value="${day}" pattern="(M/d)" />
+                        <c:if
+                            test="${sessionScope.login_employee.id == comment.employee.id}">
+                            <a
+                                href="<c:url value='?action=${actCom}&command=${commEdt}&id=${comment.id}'/>">編集</a>
+                        </c:if>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
 
 
         <form method="POST" action="<c:url value='?action=${actCom}&command=${commCre}&id=${report.id}'/>">
@@ -114,10 +90,8 @@
             <textarea name="${AttributeConst.COM_CONTENT.getValue()}" rows="3" cols="60">${comment.content}</textarea>
             <br /><br />
 
-<%--
             <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
             <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}" />
-           --%>
 
             <button type="submit">送信</button>
 

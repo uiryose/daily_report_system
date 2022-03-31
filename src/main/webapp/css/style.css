@@ -172,7 +172,7 @@ td.left-text {
   background: #a3dcc5;
   overflow: hidden;
   width: 800px;
-  margin: 50px;
+  margin:30px;
   }
 
 
@@ -193,7 +193,7 @@ td.left-text {
 .balloon {
 margin-bottom: 3px;
 position: relative;
-background-color:#b3cccb;;
+background-color:rgb(0, 128, 255);;
 }
 .balloon:before,.balloon:after {
 clear: both;
@@ -227,10 +227,10 @@ max-width: calc(100% - 120px);
 display: inline-block;
 }
 .balloon-text-right {
-border-color: #aaa;
+border-color: rgb(64, 0, 128);
 }
 .balloon-text-left {
-border-color: #aaa;
+border-color: rgb(64, 0, 128);
 }
 .balloon-text-right {
 float: left;
@@ -249,7 +249,7 @@ margin-bottom: 0;
 position: absolute;
 content: '';
 border: 10px solid transparent;
-border-right: 10px solid #aaa;
+border-right: 10px solid rgb(0, 0, 0);
 top: 15px;
 left: -20px;
 }
@@ -257,7 +257,7 @@ left: -20px;
 position: absolute;
 content: '';
 border: 10px solid transparent;
-border-right: 10px solid #fff;
+border-right: 10px solid rgb(0, 0, 0);
 top: 15px;
 left: -19px;
 }

@@ -235,13 +235,11 @@ public class EmployeeAction extends ActionBase {
                     AttributeConst.DEL_FLAG_FALSE.getIntegerValue(),
                     toNumber(getRequestParam(AttributeConst.EMP_POSITION_FLG)));
 
-            System.out.println("testです:"+ev.getPositionFlag());
-
             //アプリケーションスコープからpepper文字列を取得
             String pepper = getContextScope(PropertyConst.PEPPER);
 
             //従業員情報更新
-            List<String> errors = service.update(ev, pepper); //奥が深い…service.も不明点再び現れる
+            List<String> errors = service.update(ev, pepper);
 
             if(errors.size() > 0) {
                 //更新中にエラーが発生した場合
