@@ -65,7 +65,7 @@ public class CommentAction extends ActionBase {
             putRequestScope(AttributeConst.ERR, errors);
         }
         //元の詳細画面にリダイレクト
-        redirect(ForwardConst.ACT_REP, ForwardConst.CMD_SHOW);
+        redirect(ForwardConst.ACT_REP, ForwardConst.CMD_SHOW, toNumber(getRequestParam(AttributeConst.REP_ID)) );
 
     }
 
