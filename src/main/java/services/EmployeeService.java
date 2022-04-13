@@ -1,9 +1,12 @@
 package services;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+import javax.servlet.ServletException;
 
 import actions.views.EmployeeConverter;
 import actions.views.EmployeeView;
@@ -13,6 +16,7 @@ import models.validators.EmployeeValidator;
 import utils.EncryptUtil;
 
 public class EmployeeService extends ServiceBase {
+
 
     /**
      * 指定されたページ数の一覧画面に表示するデータを取得し、EmployeeViewのリストで返却する
@@ -156,17 +160,17 @@ public class EmployeeService extends ServiceBase {
      * @param ev 画面から入力された従業員の登録内容
      * @param pepper pepper文字列
      * @return バリデーションや更新処理中に発生したエラーのリスト
+     * @throws ServletException
+     * @throws IOException
      */
 
 
-    public List<String> update(EmployeeView ev, String pepper){
+    public List<String> update(EmployeeView ev, String pepper) throws IOException, ServletException{
 
         //idを条件に登録済みの従業員情報を取得する。ビュー画面の従業員情報からDBのID検索で情報を格納
         EmployeeView savedEmp = findOne(ev.getId());
 
         boolean validateCode = false;
-
-
         if(!savedEmp.getCode().equals(ev.getCode())) {
             //社員番号を更新する場合。DBと社員番号が異なったら、validateCodeのON/OFFを切り替える
 
@@ -179,12 +183,9 @@ public class EmployeeService extends ServiceBase {
         boolean validatePass = false;
           //ビューのパスが入力されている場合
         if(ev.getPassword() !=null && !ev.getPassword().equals("")) {
-
             validatePass = true;
-
             //変更後のパスワードをハッシュ化し設定する
             savedEmp.setPassword(EncryptUtil.getPasswordEncrypt(ev.getPassword(),pepper));
-
         }
 
         savedEmp.setName(ev.getName());
@@ -192,16 +193,17 @@ public class EmployeeService extends ServiceBase {
         savedEmp.setAdminFlag(ev.getAdminFlag());  //変更後の管理者フラグを設定する
 
         savedEmp.setPositionFlag(ev.getPositionFlag());  //変更後の役職フラグを設定する
-        System.out.println("test2です" + savedEmp.getPositionFlag());
 
         //更新日時に現在時刻を設定する
         LocalDateTime today = LocalDateTime.now();
         savedEmp.setUpdatedAt(today);
 
+        if(ev.getProfileUrl() != null) {
+            savedEmp.setProfileUrl(ev.getProfileUrl());  //画像を設定する
+        }
 
         //更新内容についてバリデーションを行う
         List<String> errors = EmployeeValidator.validate(this, savedEmp, validateCode, validatePass);
-
 
         if(errors.size() ==0) {
             update(savedEmp);
@@ -257,6 +259,85 @@ public class EmployeeService extends ServiceBase {
         return isValidEmployee;
     }
 
+    /**
+     * 検索フォームに入力された条件で検索結果を返す。CASE文を使用
+     * @param code
+     * @param name
+     * @param adminFlag
+     * @return
+     */
+    public List<EmployeeView> getSearchFINAL(String code, String name, int adminFlag) {
+
+        //検索項目が未入力の場合、代入する値も空にしておく
+        String serchConditionCode = "";
+        if(code != null && !code.equals("")) {
+          serchConditionCode = "%" + code + "%";
+        }
+        String serchConditionName = "";
+        if(name != null && !name.equals("")) {
+          serchConditionName = "%" + name + "%";
+        }
+
+        List<Employee> employees = em.createNamedQuery(JpaConst.Q_EMP_GET_SEARCH_FINAL, Employee.class)
+                .setParameter(JpaConst.JPQL_PARM_CODE, serchConditionCode)
+                .setParameter(JpaConst.JPQL_PARM_NAME, serchConditionName)
+                .setParameter(JpaConst.JPQL_PARM_ADMIN_FLAG, adminFlag)
+                .getResultList();
+
+        return EmployeeConverter.toViewList(employees);
+    }
+
+
+
+    /**
+     * 検索フォームに入力された条件で検索結果を返す。検索フォームに入力された条件によってJPQL文を判断(条件8個中4個までのお試し実装)
+     * @param code
+     * @param name
+     * @param adminFlag
+     * @return
+     */
+    public List<EmployeeView> getSearchAAA(String code, String name, int adminFlag) {
+
+        List<Employee> employees = new ArrayList<Employee>();
+
+        if(code == null && name != null && adminFlag != Integer.MIN_VALUE) { //codeとnameとadminFlagを入力した場合
+
+            employees = em.createNamedQuery(JpaConst.Q_EMP_GET_SEARCH, Employee.class)
+                    .setParameter(JpaConst.JPQL_PARM_CODE, "%" + code + "%")
+                    .setParameter(JpaConst.JPQL_PARM_NAME, "%" + name + "%")
+                    .setParameter(JpaConst.JPQL_PARM_ADMIN_FLAG, adminFlag)
+                .getResultList();
+            return EmployeeConverter.toViewList(employees);
+
+        } else if(code != null && name != null && adminFlag == Integer.MIN_VALUE) { //codeとnameを入力した場合2
+
+            employees = em.createNamedQuery(JpaConst.Q_EMP_GET_SEARCH_2, Employee.class)
+                    .setParameter(JpaConst.JPQL_PARM_CODE, "%" + code + "%")
+                    .setParameter(JpaConst.JPQL_PARM_NAME, "%" + name + "%")
+                    .getResultList();
+            return EmployeeConverter.toViewList(employees);
+
+        } else if (code != null && name == null && adminFlag != Integer.MIN_VALUE) { //codeとadminFlagを入力した場合3
+
+            employees = em.createNamedQuery(JpaConst.Q_EMP_GET_SEARCH_3, Employee.class)
+                    .setParameter(JpaConst.JPQL_PARM_CODE, "%" + code + "%")
+                    .setParameter(JpaConst.JPQL_PARM_ADMIN_FLAG, adminFlag)
+                    .getResultList();
+            return EmployeeConverter.toViewList(employees);
+
+        } else if (code == null && name != null && adminFlag != Integer.MIN_VALUE) {  //nameとadminFlagを入力した場合4
+
+            employees = em.createNamedQuery(JpaConst.Q_EMP_GET_SEARCH_4, Employee.class)
+                    .setParameter(JpaConst.JPQL_PARM_NAME, "%" + name + "%")
+                    .setParameter(JpaConst.JPQL_PARM_ADMIN_FLAG, adminFlag)
+                    .getResultList();
+            return EmployeeConverter.toViewList(employees);
+
+        }
+
+        return EmployeeConverter.toViewList(employees);
+
+    }
 
     /**
      * idを条件にデータを1件取得し、Employeeのインスタンスで返却する

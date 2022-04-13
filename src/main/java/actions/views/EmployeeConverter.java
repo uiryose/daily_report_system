@@ -41,7 +41,8 @@ public class EmployeeConverter {
                         : ev.getDeleteFlag() == AttributeConst.DEL_FLAG_TRUE.getIntegerValue()
                                 ? JpaConst.EMP_DEL_TRUE
                                 : JpaConst.EMP_DEL_FALSE,
-                ev.getPositionFlag());
+                ev.getPositionFlag(),
+                ev.getProfileUrl());
 
     }
 
@@ -73,7 +74,8 @@ public class EmployeeConverter {
                         : e.getDeleteFlag() == JpaConst.EMP_DEL_TRUE
                                 ? AttributeConst.DEL_FLAG_TRUE.getIntegerValue()
                                 : AttributeConst.DEL_FLAG_FALSE.getIntegerValue(),
-                e.getPositionFlag());
+                e.getPositionFlag(),
+                e.getProfileUrl());
     }
 
     /**
@@ -105,6 +107,7 @@ public class EmployeeConverter {
         e.setUpdatedAt(ev.getUpdatedAt());
         e.setDeleteFlag(ev.getDeleteFlag());
         e.setPositionFlag(ev.getPositionFlag());
+        e.setProfileUrl(ev.getProfileUrl());
 
     }
 }

@@ -49,8 +49,24 @@ import lombok.Setter;
 
         @NamedQuery(
                 name = JpaConst.Q_EMP_COUNT_REM_DEL,
-                query = JpaConst.Q_EMP_COUNT_DEF_REM_DEL)
+                query = JpaConst.Q_EMP_COUNT_DEF_REM_DEL),
 
+        //検索フォーム用。ただし、１～４はお試し実装。
+        @NamedQuery( //検索結果を取得する
+                name = JpaConst.Q_EMP_GET_SEARCH,
+                query = JpaConst.Q_EMP_GET_SEARCH_DEF),
+        @NamedQuery( //検索結果を取得する
+                name = JpaConst.Q_EMP_GET_SEARCH_2,
+                query = JpaConst.Q_EMP_GET_SEARCH_DEF_2),
+        @NamedQuery( //検索結果を取得する
+                name = JpaConst.Q_EMP_GET_SEARCH_3,
+                query = JpaConst.Q_EMP_GET_SEARCH_DEF_3),
+        @NamedQuery( //検索結果を取得する
+                name = JpaConst.Q_EMP_GET_SEARCH_4,
+                query = JpaConst.Q_EMP_GET_SEARCH_DEF_4),
+        @NamedQuery( //検索結果を取得する。CASE文を使用
+                name = JpaConst.Q_EMP_GET_SEARCH_FINAL,
+                query = JpaConst.Q_EMP_GET_SEARCH_FINAL_DEF)
 
 })
 
@@ -115,6 +131,11 @@ public class Employee {
     @Column(name = JpaConst.EMP_COL_POSITION_FLAG, nullable = true)
     private Integer positionFlag;
 
+    /**
+     * 従業員の画像のURL
+     */
+    @Column(name = JpaConst.EMP_COL_PROFILE_URL, nullable = true)
+    private String profileUrl;
 
 
 }

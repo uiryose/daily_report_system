@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.Part;
 
 import actions.views.EmployeeView;
 import actions.views.FollowView;
@@ -19,6 +21,8 @@ import services.FollowService;
  * 従業員に関わる処理を行うActionクラス
  *
  */
+//@MultipartConfig(location="C:/tmp", maxFileSize=1048576)
+@MultipartConfig(location="C:/tmp", maxFileSize=1000000, maxRequestSize=1000000, fileSizeThreshold=1000000)
 public class EmployeeAction extends ActionBase {
 
     private EmployeeService service;
@@ -76,6 +80,9 @@ public class EmployeeAction extends ActionBase {
                 removeSessionScope(AttributeConst.FLUSH); //セッションスコープからは削除する
             }
 
+            //searchメソッドからのアクセスと区別する
+            String callMethod = "index";
+            putRequestScope(AttributeConst.CALL_METHOD, callMethod);
             //一覧画面を表示
             forward(ForwardConst.FW_EMP_INDEX);
         }
@@ -123,7 +130,8 @@ public class EmployeeAction extends ActionBase {
                     null,
                     null,
                     AttributeConst.DEL_FLAG_FALSE.getIntegerValue(),
-                    toNumber(getRequestParam(AttributeConst.EMP_POSITION_FLG)));
+                    toNumber(getRequestParam(AttributeConst.EMP_POSITION_FLG)),
+                    getRequestParam(AttributeConst.EMP_PROFILE_URL));
 
             //アプリケーションスコープからpepper文字列を取得
             String pepper = getContextScope(PropertyConst.PEPPER);  //contextが絡む処理が理解できていない…pepperて何？
@@ -220,7 +228,22 @@ public class EmployeeAction extends ActionBase {
      */
     public void update() throws ServletException, IOException{
 
-      //CSRF対策 tokenのチェックと管理者権限のチェック
+        //画像を保存する処理を行う
+        //name属性がEMP_PROFILE_URLのファイルをPartオブジェクトとして取得
+        Part part = request.getPart(AttributeConst.EMP_PROFILE_URL.getValue());
+
+        //従業員IDを元に画像のURLを取得する
+        String imageName = service.findOne(toNumber(getRequestParam(AttributeConst.EMP_ID))).getProfileUrl();
+
+        if(part.getSubmittedFileName() != null || part.getSubmittedFileName().equals("")) { //ここが機能していない
+            //新しいファイル名を取得(先頭に従業員番号を加える)
+            imageName = getRequestParam(AttributeConst.EMP_CODE) + part.getSubmittedFileName(); //ie対応が不要な場合
+            //フォルダに画像の書き込み
+            part.write(context.getRealPath("/upload") + "/" + imageName);
+        }
+
+
+        //CSRF対策 tokenのチェックと管理者権限のチェック
         if(checkToken() && checkAdmin()) {
             //パラメータの値を元に従業員情報のインスタンスを作成する
 
@@ -233,7 +256,8 @@ public class EmployeeAction extends ActionBase {
                     null,
                     null,
                     AttributeConst.DEL_FLAG_FALSE.getIntegerValue(),
-                    toNumber(getRequestParam(AttributeConst.EMP_POSITION_FLG)));
+                    toNumber(getRequestParam(AttributeConst.EMP_POSITION_FLG)),
+                    imageName);
 
             //アプリケーションスコープからpepper文字列を取得
             String pepper = getContextScope(PropertyConst.PEPPER);
@@ -345,5 +369,29 @@ public class EmployeeAction extends ActionBase {
 
         //一覧画面を表示
         forward(ForwardConst.FW_EMP_ALL);
+    }
+
+    /**
+     * 検索項目に一致するデータを表示する
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void search() throws ServletException, IOException{
+
+        String code = getRequestParam(AttributeConst.EMP_CODE);
+        String name = getRequestParam(AttributeConst.EMP_NAME);
+        int adminFlag = toNumber(getRequestParam(AttributeConst.EMP_ADMIN_FLG));
+
+        //指定された検索項目に一致するデータを取得
+        List<EmployeeView> employeesSearch = service.getSearchFINAL(code, name, adminFlag);
+
+        putRequestScope(AttributeConst.EMPLOYEES_SEARCH, employeesSearch);
+
+        String callMethod = "search";
+        putRequestScope(AttributeConst.CALL_METHOD, callMethod);
+
+        //一覧画面を表示
+        forward(ForwardConst.FW_EMP_INDEX);
+
     }
 }

@@ -27,13 +27,14 @@ public enum AttributeConst {
     EMPLOYEE("employee"),
     EMPLOYEES("employees"),
     EMP_COUNT("employees_count"),
+    EMPLOYEES_SEARCH("employees_search"),
     EMP_ID("id"),
     EMP_CODE("code"),
     EMP_PASS("password"),
     EMP_NAME("name"),
     EMP_ADMIN_FLG("admin_flag"),
-
     EMP_POSITION_FLG("position_flag"),
+    EMP_PROFILE_URL("profile_url"),
 
     //管理者フラグ
     ROLE_ADMIN(1),
@@ -73,9 +74,12 @@ public enum AttributeConst {
     COM_ID("id"),
     COM_REP_ID("rep_id"),
     COM_EMP_ID("emp_id"),
-    COM_CONTENT("content");
+    COM_CONTENT("content"),
 
+    //画面呼び出し
+    CALL_METHOD("call_method");
 
+    //文字列、数値を保持するフィールド
     private final String text;
     private final Integer i;
 

@@ -24,6 +24,7 @@ public interface JpaConst {
     String EMP_COL_UPDATED_AT = "updated_at"; //更新日時
     String EMP_COL_DELETE_FLAG = "delete_flag"; //削除フラグ
     String EMP_COL_POSITION_FLAG = "position_flag";//役職
+    String EMP_COL_PROFILE_URL = "profile_url";//画像URL
 
     int ROLE_ADMIN = 1; //管理者権限ON(管理者)
     int ROLE_GENERAL = 0; //管理者権限OFF(一般)
@@ -76,19 +77,19 @@ public interface JpaConst {
     String ENTITY_COM = "comment"; //コメント
 
     //JPQL内パラメータ
-
+    String JPQL_PARM_NAME = "name"; //氏名
     String JPQL_PARM_ID = "id"; //id
     String JPQL_PARM_ID_FOL = "follow_id"; //フォロー先の従業員ID
     String JPQL_PARM_CODE = "code"; //社員番号
     String JPQL_PARM_PASSWORD = "password"; //パスワード
     String JPQL_PARM_EMPLOYEE = "employee"; //従業員
-
+    String JPQL_PARM_ADMIN_FLAG = "admin_flag"; //管理者権限
     String JPQL_PARM_DELET_FLG = "delete_flag"; //削除フラグ
-
     String JPQL_PARM_FOLLOW = "follow"; //フォロー
+    String JPQL_PARM_PROFILE_URL ="profile_url";
 
     int JPQL_DEL_TRUE = 1; //削除フラグON(削除済み)
-    int JPQL_DEL_FALSE = 0; //削除フラグOFF(現役)            //JPQL用に別途定義する？カラム名
+    int JPQL_DEL_FALSE = 0; //削除フラグOFF(現役)
 
 
     //NamedQueryの nameとquery
@@ -136,4 +137,29 @@ public interface JpaConst {
     //指定したレポートのidでコメント情報を取得する
     String Q_COM_GET_ALL_MINE = ENTITY_COM + "getAllMine";
     String Q_COM_GET_ALL_MINE_DEF = "SELECT c FROM Comment AS c WHERE c.report.id = :" + JPQL_PARM_ID;
+
+
+
+    //従業員検索（３項目入力した場合）
+    String Q_EMP_GET_SEARCH = ENTITY_EMP + ".getSearch";
+    String Q_EMP_GET_SEARCH_DEF = "SELECT e FROM Employee AS e WHERE e.code LIKE :" + JPQL_PARM_CODE + " AND e.name LIKE :" + JPQL_PARM_NAME + " AND e.adminFlag = :" + JPQL_PARM_ADMIN_FLAG;
+
+    //従業員検索（codeとnameを入力した場合）
+    String Q_EMP_GET_SEARCH_2 = ENTITY_EMP + ".getSearch2";
+    String Q_EMP_GET_SEARCH_DEF_2 = "SELECT e FROM Employee AS e WHERE e.code LIKE :" + JPQL_PARM_CODE + " AND e.name LIKE :" + JPQL_PARM_NAME ;
+
+    //従業員検索（codeとadminFlagを入力した場合）
+    String Q_EMP_GET_SEARCH_3 = ENTITY_EMP + ".getSearch3";
+    String Q_EMP_GET_SEARCH_DEF_3 = "SELECT e FROM Employee AS e WHERE e.code LIKE :" + JPQL_PARM_CODE + " AND e.adminFlag = :" + JPQL_PARM_ADMIN_FLAG ;
+
+    //従業員検索（nameとadminFlagを入力した場合）
+    String Q_EMP_GET_SEARCH_4 = ENTITY_EMP + ".getSearch4";
+    String Q_EMP_GET_SEARCH_DEF_4 = "SELECT e FROM Employee AS e WHERE e.name LIKE :" + JPQL_PARM_NAME + " AND e.adminFlag = :" + JPQL_PARM_ADMIN_FLAG ;
+
+
+    String Q_EMP_GET_SEARCH_FINAL = ENTITY_EMP + ".getSearchFINAL";
+    String Q_EMP_GET_SEARCH_FINAL_DEF = "SELECT e FROM Employee AS e WHERE e.code LIKE CASE WHEN :" + JPQL_PARM_CODE + " = '' THEN e.code  ELSE  :" + JPQL_PARM_CODE + " END" +
+                                            " AND e.name LIKE CASE WHEN :" + JPQL_PARM_NAME + " = '' THEN e.name  ELSE  :" + JPQL_PARM_NAME + " END"+
+                                            " AND e.adminFlag = CASE WHEN :" + JPQL_PARM_ADMIN_FLAG + " = 9 THEN e.adminFlag  ELSE  :" + JPQL_PARM_ADMIN_FLAG + " END";
+
 }

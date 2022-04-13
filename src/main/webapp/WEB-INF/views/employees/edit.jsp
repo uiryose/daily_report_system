@@ -6,15 +6,15 @@
 <c:set var="action" value="${ForwardConst.ACT_EMP.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commUpd" value="${ForwardConst.CMD_UPDATE.getValue()}" />
-<c:set var="commDel" value="${ForwardConst.CMD_DESTROY.getValue()}" />  <%-- value="destroy"のこと。 <c:set>の価値ある？
+<c:set var="commDel" value="${ForwardConst.CMD_DESTROY.getValue()}" />
  --%>
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
 
-    <h2>id : ${employee.id}の従業員情報 編集ページ</h2>    <!-- AbbustractConst.EMP_ID.getIntegerValue()とかにしないのはなぜ -->
+    <h2>id : ${employee.id}の従業員情報 編集ページ</h2>
     <p> (パスワードは変更する場合のみ入力してください) </p>
 
-    <form method="POST"
+    <form method="POST" enctype="multipart/form-data"
         action="<c:url value='?action=${action}&command=${commUpd}'/> ">
         <c:import url="_form.jsp" />
     </form>

@@ -31,7 +31,7 @@
 
 <label for="${AttributeConst.EMP_ADMIN_FLG.getValue()}">権限</label><br>
 <select name="${AttributeConst.EMP_ADMIN_FLG.getValue()}" >
-    <option value="${AttuributeConst.ROLE_GENERAL.getIntegerValue()}"
+    <option value="${AttributeConst.ROLE_GENERAL.getIntegerValue()}"
         <c:if test="${employee.adminFlag==AttributeConst.ROLE_GENERAL.getIntegerValue()}"> selected</c:if>>
         一般
     </option>
@@ -58,7 +58,9 @@
         役員
     </option>
 </select>
+<br>
 
+<p><input type="file" name="${AttributeConst.EMP_PROFILE_URL.getValue()}"/></p>
 
 <br><br>
 <input type="hidden" name="${AttributeConst.EMP_ID.getValue()}" value="${employee.id}" />
