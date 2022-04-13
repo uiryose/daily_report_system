@@ -251,7 +251,7 @@ public class ReportAction extends ActionBase{
                 //更新中にエラーがなかった場合
 
                 //セッションに更新完了のフラッシュメッセージを設定
-                putSessionScope(AttributeConst.FLUSH, MessageConst.I_DELETED.getMessage());
+                putSessionScope(AttributeConst.FLUSH, MessageConst.I_UPDATED.getMessage());
 
                 //一覧画面にリダイレクト
                 redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);   //("Report","index")
