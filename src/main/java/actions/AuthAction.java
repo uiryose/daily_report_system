@@ -24,7 +24,6 @@ public class AuthAction extends ActionBase{
      * メソッドを実行する
      */
     @Override
-    //この処理が本当にわからない・・・
     public void process() throws ServletException, IOException {
 
         service = new EmployeeService();

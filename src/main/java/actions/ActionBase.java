@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,7 +21,7 @@ import constants.PropertyConst;
  * 各Actionクラスの親クラス。共通処理を設定しておく
  *
  */
-
+@MultipartConfig(location="C:/tmp", maxFileSize=1000000, maxRequestSize=1000000, fileSizeThreshold=1000000)
 public abstract class ActionBase {
 
     protected ServletContext context;

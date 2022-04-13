@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import actions.UnknownAction;
 import constants.ForwardConst;
 
 @WebServlet("/")
+@MultipartConfig(location="C:/tmp", maxFileSize=1000000, maxRequestSize=1000000, fileSizeThreshold=1000000)
 public class FrontController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -56,8 +58,6 @@ public class FrontController extends HttpServlet {
 
             //該当するActionオブジェクトを作成 (例:リクエストからパラメータ action=Employee の場合、actions.EmployeeActionオブジェクト)
             type = Class.forName(String.format("actions.%sAction", actionString));
-
-            //actions.をaction.で間違えていた。どういう状況になっていた？
 
             //ActionBaseのオブジェクトにキャスト(例:actions.EmployeeActionオブジェクト→actions.ActionBaseオブジェクト)
             action = (ActionBase) (type.asSubclass(ActionBase.class).getDeclaredConstructor().newInstance());

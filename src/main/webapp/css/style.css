@@ -165,7 +165,10 @@ td.left-text {
   float: right;
 }
 
-
+.prof-img {
+    height: 200px;
+    width: auto;
+}
 
 .comment {
   padding:0;

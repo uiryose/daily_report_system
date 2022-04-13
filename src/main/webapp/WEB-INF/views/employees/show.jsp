@@ -42,6 +42,14 @@
                     <fmt:parseDate value="${employee.updatedAt}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="updateDay" type="date"/>
                     <td><fmt:formatDate value="${updateDay}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                 </tr>
+                <tr>
+                    <th>プロフ画像</th>
+                    <td>
+                         <c:if test="${employee.profileUrl != null }">
+                            <img class="prof-img" src="<c:url value='/upload/${employee.profileUrl}' /> " >
+<%--                        <img class="prof-img" src="${pageContext.request.contextPath}/upload/${employee.profileUrl} " > --%>                        </c:if>
+                     </td>
+                </tr>
             </tbody>
         </table>
 

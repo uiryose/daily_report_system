@@ -46,6 +46,9 @@ public class LoginFilter implements Filter {
         if (servletPath.matches("/css.*")) {
             // CSSフォルダ内は認証処理から除外する
             chain.doFilter(request, response);
+        } else if (servletPath.matches( "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)")) { //画像形式全てスルーさせる
+                // CSSフォルダ内は認証処理から除外する
+                chain.doFilter(request, response);
 
         } else {
             HttpSession session = ((HttpServletRequest) request).getSession();

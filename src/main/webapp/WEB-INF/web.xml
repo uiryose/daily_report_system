@@ -6,6 +6,7 @@
   <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>*.css</url-pattern>
+    <url-pattern>*.jpg</url-pattern>
   </servlet-mapping>
   <display-name>daily_report_system</display-name>
 </web-app>
