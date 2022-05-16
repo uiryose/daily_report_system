@@ -29,7 +29,7 @@ import lombok.Setter;
 @NamedQueries({
     @NamedQuery( //全ての日報をidの降順に取得する
             name = JpaConst.Q_REP_GET_ALL,
-            query = JpaConst.Q_REP_GET_ALL_DEF), //==>"SELECT r FROM Report AS r ORDER BY r.id DESC"
+            query = JpaConst.Q_REP_GET_ALL_DEF),
 
     @NamedQuery( //全ての日報の件数を取得する
             name = JpaConst.Q_REP_COUNT,
@@ -40,7 +40,7 @@ import lombok.Setter;
             query = JpaConst.Q_REP_GET_ALL_MINE_DEF),
 
     @NamedQuery( //指定した従業員が作成した日報の件数を取得する
-            name = JpaConst.Q_REP_COUNT_ALL_MINE,   //==>"report.countALlMine" ==>使用は1度だけ、効率的な仕様になる…？
+            name = JpaConst.Q_REP_COUNT_ALL_MINE,
             query = JpaConst.Q_REP_COUNT_ALL_MINE_DEF)
 })
 

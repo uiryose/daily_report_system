@@ -12,6 +12,7 @@
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commOut" value="${ForwardConst.CMD_LOGOUT.getValue()}" />
 <c:set var="commAll" value="${ForwardConst.CMD_ALL.getValue()}" />
+<c:set var="commFav" value="${ForwardConst.CMD_FAVORITE.getValue()}" />
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -39,7 +40,7 @@
 
                     <a href="<c:url value='?action=${actEmp}&command=${commAll}' />">在籍社員</a>&nbsp;
 
-                    <a href="<c:url value='?action=${actFol}&command=${commIdx}' />">お気に入り</a>&nbsp;
+                    <a href="<c:url value='?action=${actEmp}&command=${commFav}' />">お気に入り</a>&nbsp;
                 </c:if>
 
             </div>

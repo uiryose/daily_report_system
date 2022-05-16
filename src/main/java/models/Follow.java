@@ -28,9 +28,12 @@ import lombok.Setter;
     @NamedQuery(
             name = JpaConst.Q_FOL_GET_ONE,
             query = JpaConst.Q_FOL_GET_ONE_DEF),
-    @NamedQuery(
+    @NamedQuery( //指定した従業員のフォロー先を全件idの昇順で取得する
             name = JpaConst.Q_FOL_GET_ALL_MINE,
-            query = JpaConst.Q_FOL_GET_ALL_MINE_DEF)
+            query = JpaConst.Q_FOL_GET_ALL_MINE_DEF),
+    @NamedQuery( //指定した従業員がフォローしている従業員の件数を取得する
+            name = JpaConst.Q_FOL_COUNT_ALL_MINE,
+            query = JpaConst.Q_FOL_COUNT_ALL_MINE_DEF)
 })
 
 @Getter //全てのクラスフィールドについてgetterを自動生成する(Lombok)

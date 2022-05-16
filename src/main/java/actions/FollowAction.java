@@ -37,24 +37,6 @@ public class FollowAction extends ActionBase {
     }
 
 
-
-    /**
-     * フォロー一覧画面を表示する
-     * @throws ServletException
-     * @throws IOException
-     */
-//    public void index() throws ServletException,IOException{
-//
-//        List<FollowView> follows = service.getAll();
-//
-//        //リクエストスコープに情報を保存する
-//        putRequestScope(AttributeConst.FOLLOWS, follows);
-//
-//        //フォロー一覧に移動する
-//        forward(ForwardConst.FW_FOL_INDEX);
-//    }
-//
-
     /**
      * 従業員をフォローする
      * @throws ServletException
@@ -117,17 +99,15 @@ public class FollowAction extends ActionBase {
             service.remove(f);
         }
 
-        //在籍社員一覧を表示してフォロー状態を反映させる
-        redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_ALL);
+        //お気に入り画面からフォローを外した場合は、お気に入り画面に戻る
+        String forward = request.getParameter("display");
+
+        if(forward != null && forward.equals("fav")) {
+            redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_FAVORITE);
+
+        } else {
+            redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_ALL);
+        }
     }
-
-
-    //フォローしている従業員を表示する
-    public void index() throws ServletException, IOException{
-
-
-
-    }
-
 
 }

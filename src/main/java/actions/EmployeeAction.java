@@ -59,7 +59,7 @@ public class EmployeeAction extends ActionBase {
 
             //指定されたページ数の一覧画面に表示するデータを取得
             int page = getPage(); //パラメータから"page"に対応する情報を数値で取得する
-            List<EmployeeView> employees = service.getPerPage(page, true); //1-15,16-30ごと従業員情報を取得？
+            List<EmployeeView> employees = service.getPerPage(page, true); //1-15,16-30ごと従業員情報を取得
 
             //全ての従業員データの件数を取得
             long employeeCount = service.countAll(true);
@@ -70,14 +70,10 @@ public class EmployeeAction extends ActionBase {
             putRequestScope(AttributeConst.PAGE, page); //ページ数
             putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE);//1ページに表示するレコードの数
 
-            //セッションにフラッシュメッセージが設定されている場合はリクエストスコープに移し替え、セッションからは削除する
-            //各アクションで「登録が完了しました」や「更新が完了しました」、「削除が完了しました」といった内容を一覧画面にフラッシュメッセージとして表示します。
-
             String flush = getSessionScope(AttributeConst.FLUSH);
-
             if (flush != null) {
-                putRequestScope(AttributeConst.FLUSH, flush); //文字列flushがあったらリクエストスコープに保存
-                removeSessionScope(AttributeConst.FLUSH); //セッションスコープからは削除する
+                putRequestScope(AttributeConst.FLUSH, flush);
+                removeSessionScope(AttributeConst.FLUSH);
             }
 
             //searchメソッドからのアクセスと区別する
@@ -371,6 +367,33 @@ public class EmployeeAction extends ActionBase {
         forward(ForwardConst.FW_EMP_ALL);
     }
 
+
+    /**
+     * フォロー従業員の一覧を取得して、お気に入り画面に表示する
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void favorite() throws ServletException, IOException {
+
+        //セッションからログイン中の従業員情報を取得
+        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+
+        //フォロー中の従業員件数を取得
+        long folCount = followService.countAll(ev);
+
+        //フォロー状態を反映するために、フォロー一覧のリストを作成する
+        List<FollowView> follows = followService.getAllMine(ev);
+
+        //取得したフォローデータをリクエストスコープに保存する
+        putRequestScope(AttributeConst.FOLLOWS, follows);
+        putRequestScope(AttributeConst.FOL_COUNT, folCount);
+
+
+        //一覧画面を表示
+        forward(ForwardConst.FW_EMP_FAVORITE);
+    }
+
+
     /**
      * 検索項目に一致するデータを表示する
      * @throws ServletException
@@ -382,16 +405,24 @@ public class EmployeeAction extends ActionBase {
         String name = getRequestParam(AttributeConst.EMP_NAME);
         int adminFlag = toNumber(getRequestParam(AttributeConst.EMP_ADMIN_FLG));
 
+ System.out.println("テストcode:" + code);
+ System.out.println("テストname:" + name);
+ System.out.println("テストadminFlag:" + adminFlag);
+
+
         //指定された検索項目に一致するデータを取得
         List<EmployeeView> employeesSearch = service.getSearchFINAL(code, name, adminFlag);
 
         putRequestScope(AttributeConst.EMPLOYEES_SEARCH, employeesSearch);
 
+        //この検索メソッドから一覧画面が表示された場合は、通常の一覧表示とJSPの表示を分ける
         String callMethod = "search";
         putRequestScope(AttributeConst.CALL_METHOD, callMethod);
 
         //一覧画面を表示
         forward(ForwardConst.FW_EMP_INDEX);
-
     }
+
+
+
 }

@@ -28,10 +28,10 @@
         <tbody>
             <tr>
                 <th>氏名</th>
-                <td><c:out value="${report.employee.name}"/></td>    <!-- reportとAttributeConst.REPとの違い…？ -->
+                <td><c:out value="${report.employee.name}"/></td>
             </tr>
             <tr>
-                <th>日付</th>     <!-- fmt:***は設定のみ？もう一度確認 -->
+                <th>日付</th>
                 <fmt:parseDate value="${report.reportDate}" pattern="yyyy-MM-dd" var="reportDay" type="date" />
                 <td><fmt:formatDate value='${reportDay}' pattern='yyyy-MM-dd' /></td>
             </tr>

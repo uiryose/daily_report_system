@@ -67,6 +67,7 @@ public enum AttributeConst {
     FOLLOWS("follows"),
     FOL_MY_ID("my_id"),
     FOL_FOLLOW_ID("follow_id"),
+    FOL_COUNT("follow_count"),
 
     //コメント
     COMMENT("comment"),

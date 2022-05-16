@@ -31,6 +31,7 @@ public enum ForwardConst {
     CMD_ALL("all"),
     CMD_FOLLOW("follow"),
     CMD_FOLLOW_REMOVE("remove"),
+    CMD_FAVORITE("favorite"),
 
     //jsp
     FW_ERR_UNKNOWN("error/unknown"),
@@ -40,8 +41,8 @@ public enum ForwardConst {
     FW_EMP_SHOW("employees/show"),
     FW_EMP_NEW("employees/new"),
     FW_EMP_EDIT("employees/edit"),
-    FW_EMP_ALL("employees/all"),        //追加
-    FW_EMP_FOLLOW("employees/follow"),  //追加
+    FW_EMP_ALL("employees/all"),
+    FW_EMP_FAVORITE("employees/favorite"),
     FW_REP_INDEX("reports/index"),
     FW_REP_SHOW("reports/show"),
     FW_REP_NEW("reports/new"),

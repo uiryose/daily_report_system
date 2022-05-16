@@ -130,15 +130,25 @@ public interface JpaConst {
     String Q_FOL_GET_ONE = ENTITY_FOL + ".getOne";
     String Q_FOL_GET_ONE_DEF = "SELECT f FROM Follow AS f WHERE f.myEmployee.id = :" +  JPQL_PARM_ID +" AND f.followEmployee.id = :" + JPQL_PARM_ID_FOL;
 
-    //指定した従業員のフォロー先を全件idの降順で取得する
+//a.指定した従業員のフォロー先を全件idの昇順で取得する
     String Q_FOL_GET_ALL_MINE = ENTITY_FOL + ".getAllMine";
-    String Q_FOL_GET_ALL_MINE_DEF = "SELECT f FROM Follow AS f WHERE f.myEmployee = :" + JPQL_PARM_EMPLOYEE + " ORDER BY f.id DESC";
+    String Q_FOL_GET_ALL_MINE_DEF = "SELECT f FROM Follow AS f WHERE f.myEmployee = :" + JPQL_PARM_EMPLOYEE + " ORDER BY f.followEmployee.code";
+
+//b.cフォローしている従業員が書いた日報リストの最新１件を取得する
+    String Q_REP_GET_FOLLOW = ENTITY_REP + ".getFolOne";
+    String Q_REP_GET_FOLLOW_DEF = "SELECT r FROM Report AS r WHERE r.employee = :"+ JPQL_PARM_EMPLOYEE + "ORDER BY r.createdAt DESC LIMIT 1";
+
+//フォローテーブルとレポートテーブルを結合する
+    String Q_FOL_REP_JOIN = ENTITY_FOL + ".getFolRep";
+    String Q_FOL_REP_JOIN_DEF = "SELECT f, r FROM Follow AS f INNER JOIN Report AS r ON r.employee.id = f.followEmployee.id" ;
+
+    //指定した従業員がフォローしている従業員の件数を取得する
+    String Q_FOL_COUNT_ALL_MINE = ENTITY_FOL + ".countAllMine";
+    String Q_FOL_COUNT_ALL_MINE_DEF = "SELECT COUNT(f) FROM Follow AS f WHERE f.myEmployee = :" + JPQL_PARM_EMPLOYEE;
 
     //指定したレポートのidでコメント情報を取得する
     String Q_COM_GET_ALL_MINE = ENTITY_COM + "getAllMine";
     String Q_COM_GET_ALL_MINE_DEF = "SELECT c FROM Comment AS c WHERE c.report.id = :" + JPQL_PARM_ID;
-
-
 
     //従業員検索（３項目入力した場合）
     String Q_EMP_GET_SEARCH = ENTITY_EMP + ".getSearch";

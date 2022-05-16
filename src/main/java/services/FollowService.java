@@ -57,7 +57,7 @@ public class FollowService extends ServiceBase {
 
 
     /**
-     * フォローデータを削除する   (コンバーター入れてるがなぜか失敗する)
+     * フォローデータを削除する
      * @param fv フォローデータ
      */
     public void remove(Follow f) {
@@ -103,6 +103,17 @@ public class FollowService extends ServiceBase {
         return FollowConverter.toViewList(follows);
     }
 
+
+    /**
+     * フォローしている従業員の件数を取得し、返却する
+     * @return
+     */
+    public long countAll(EmployeeView ev) {
+        long folCount = (long) em.createNamedQuery(JpaConst.Q_FOL_COUNT_ALL_MINE, Long.class)
+                .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(ev))
+                .getSingleResult();
+        return folCount;
+    }
 
 
 

@@ -27,16 +27,17 @@
 
         <form method="POST" action="<c:url value='?action=${actEmp}&command=${commSrh}' />">
 
-            <label for="${AttributeConst.EMP_CODE.getValue()}">社員番号:</label> <input
-                type="text" name="${AttributeConst.EMP_CODE.getValue()}">&nbsp;&nbsp;
-            <label for="${AttributeConst.EMP_NAME.getValue()}">氏名:</label> <input
-                type="text" name="${AttributeConst.EMP_NAME.getValue()}">&nbsp;&nbsp;
-            <label for="${AttributeConst.EMP_ADMIN_FLG.getValue()}">権限:</label> <select
-                name="${AttributeConst.EMP_ADMIN_FLG.getValue()}">
-                <option selected value="9" >未選択</option>
-                <option value="${AttributeConst.ROLE_GENERAL.getIntegerValue()}">一般</option>
-                <option value="${AttributeConst.ROLE_ADMIN.getIntegerValue()}">管理者</option>
-            </select> &nbsp;&nbsp;&nbsp; <input type="submit" value="  検索  ">
+            <label for="${AttributeConst.EMP_CODE.getValue()}">社員番号:</label>
+                <input type="text" name="${AttributeConst.EMP_CODE.getValue()}">&nbsp;&nbsp;
+            <label for="${AttributeConst.EMP_NAME.getValue()}">氏名:</label>
+                <input type="text" name="${AttributeConst.EMP_NAME.getValue()}">&nbsp;&nbsp;
+            <label for="${AttributeConst.EMP_ADMIN_FLG.getValue()}">権限:</label>
+            <select name="${AttributeConst.EMP_ADMIN_FLG.getValue()}">
+                    <option selected value="9" >未選択</option>
+                    <option value="${AttributeConst.ROLE_GENERAL.getIntegerValue()}">一般</option>
+                    <option value="${AttributeConst.ROLE_ADMIN.getIntegerValue()}">管理者</option>
+            </select> &nbsp;&nbsp;&nbsp;
+            <input type="submit" value="  検索  ">
         </form>
         <br>
 

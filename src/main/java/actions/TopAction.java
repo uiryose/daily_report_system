@@ -38,13 +38,13 @@ public class TopAction extends ActionBase {
 
    public void index() throws ServletException, IOException{
 
-       //セッションからログイン中の従業員情報を取得                  "login_employee"の文字列
+       //セッションからログイン中の従業員情報を取得
        //AuthActionクラスのlogin()メソッドでログイン成功時にセッションにLOGIN_EMPのオブジェクト情報を保存している。
        EmployeeView loginEmployee = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
 
        //ログイン中の従業員が作成した日報データを、指定されたページ数の一覧画面に表示する分取得する
-       int page = getPage();   //なんのPageを取得する？
-       List<ReportView> reports = service.getMinePerPage(loginEmployee, page); //よくわからない・・・。
+       int page = getPage();
+       List<ReportView> reports = service.getMinePerPage(loginEmployee, page);
 
        //ログイン中の従業員が作成した日報データの件数を取得
        long myReportsCount = service.countAllMine(loginEmployee);

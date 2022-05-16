@@ -33,7 +33,7 @@ import lombok.Setter;
                 query = JpaConst.Q_EMP_COUNT_DEF), //==> "SELECT COUNT(e) FROM Employee AS e"
 
         @NamedQuery(
-                //指定した社員番号を保持する従業員の件数を取得する.指定された社員番号がすでにデータベースに存在しているかを調べます。
+                //指定した社員番号を保持する従業員の件数を取得する.指定された社員番号がすでにデータベースに存在しているかを調べる。
                 name = JpaConst.Q_EMP_COUNT_RESISTERED_BY_CODE, //==>ENTITY_EMP + ".countRegisteredByCode" ==>employee +".countRegisteredByCode"
                 query = JpaConst.Q_EMP_COUNT_RESISTERED_BY_CODE_DEF), //==>"SELECT COUNT(e) FROM Employee AS e WHERE e.code = :" + JPQL_PARM_CODE;
 
@@ -43,11 +43,11 @@ import lombok.Setter;
                 name = JpaConst.Q_EMP_GET_BY_CODE_AND_PASS, //==> ENTITY_EMP + ".getByCodeAndPass" ==> employee + ".getByCodeAndPass"
                 query = JpaConst.Q_EMP_GET_BY_CODE_AND_PASS_DEF),//==>  "SELECT COUNT(e) FROM Employee AS e WHERE e.code = :" + JPQL_PARM_CODE
 
-        @NamedQuery(
+        @NamedQuery(//論理削除を除く全ての従業員
                 name = JpaConst.Q_EMP_GET_ALL_REM_DEL,
                 query = JpaConst.Q_EMP_GET_ALL_REM_DEL_DEF),
 
-        @NamedQuery(
+        @NamedQuery(//論理削除を除く全ての従業員の件数を取得する
                 name = JpaConst.Q_EMP_COUNT_REM_DEL,
                 query = JpaConst.Q_EMP_COUNT_DEF_REM_DEL),
 
